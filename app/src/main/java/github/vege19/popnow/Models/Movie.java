@@ -128,5 +128,5 @@ public class Movie {
     public void setVote_average(float vote_average) {
         this.vote_average = vote_average;
     }
-    
+
 }
