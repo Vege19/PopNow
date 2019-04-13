@@ -2,4 +2,7 @@
     <string name="app_name">PopNow</string>
     <string name="navigation_movies">Movies</string>
     <string name="navigation_tv">TV Shows</string>
+    <string name="popular_movies_title">Popular</string>
+    <string name="top_movies_title">Top Rated</string>
+    <string name="upcoming_movies_title">Upcoming</string>
 </resources>
