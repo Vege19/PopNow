@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vege19.popnow.R;
+import github.vege19.popnow.Retrofit.ApiService;
+import retrofit2.Retrofit;
 
 public class MoviesFragment extends Fragment {
 

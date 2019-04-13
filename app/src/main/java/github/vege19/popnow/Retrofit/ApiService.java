@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 
 public interface ApiService {
 
-    public String base_url = "https://api.themoviedb.org/3";
+    String base_url = "https://api.themoviedb.org/3";
 
     //Get a list of popular movies
     @GET("/movie/popular")
