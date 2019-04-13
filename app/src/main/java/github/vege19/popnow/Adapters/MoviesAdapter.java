@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import github.vege19.popnow.Models.Movie;
 import github.vege19.popnow.R;
+import github.vege19.popnow.Retrofit.ApiService;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
@@ -38,7 +39,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         Movie movie = movies.get(position);
 
         Glide.with(context)
-                .load(movie.getPoster_path())
+                .load(ApiService.imageURL + movie.getPoster_path())
                 .into(holder.moviePoster);
 
     }
