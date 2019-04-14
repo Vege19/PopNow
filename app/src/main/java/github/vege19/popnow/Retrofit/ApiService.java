@@ -17,5 +17,11 @@ public interface ApiService {
                                                 @Query("language") String language,
                                                 @Query("page") int page);
 
+    //Get a list of popular movies
+    @GET("movie/top_rated")
+    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String api_key,
+                                          @Query("language") String language,
+                                          @Query("page") int page);
+
 
 }

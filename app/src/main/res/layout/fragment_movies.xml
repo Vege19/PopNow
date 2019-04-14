@@ -38,8 +38,10 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -49,7 +51,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/popularMoviesRecyclerview"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="16dp"/>
 
@@ -63,7 +65,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/topRatedMoviesRecyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="160dp"
                 android:layout_marginTop="16dp"/>
 
             <TextView

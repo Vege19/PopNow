@@ -32,10 +32,12 @@ public class MoviesFragment extends Fragment {
 
     private Retrofit retrofit;
     private ApiService api;
-    private MoviesAdapter moviesAdapter;
-    private RecyclerView popularRecyclerview;
+    private MoviesAdapter popularMoviesAdapter, topRatedMoviesAdapter;
+    private RecyclerView popularRecyclerview, topRatedMoviesRecyclerview;
     private RecyclerView.LayoutManager layoutManager;
     private LinearLayout noInternetMessage, moviesLayout;
+    private List<Movie> popularMoviesList = new ArrayList<>();
+    private List<Movie> topRatedMoviesList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -51,6 +53,8 @@ public class MoviesFragment extends Fragment {
         noInternetMessage = getActivity().findViewById(R.id.moviesNoInternetMessage);
         moviesLayout = getActivity().findViewById(R.id.moviesLayout);
 
+        retrofitSetup();
+
     }
 
     @Override
@@ -61,23 +65,33 @@ public class MoviesFragment extends Fragment {
         noInternetMessage.setVisibility(View.INVISIBLE);
         moviesLayout.setVisibility(View.INVISIBLE);
 
-        retrofitSetup();
     }
 
-    private void recyclerviewSetup(List<Movie> movies) {
+    private RecyclerView.LayoutManager layoutManager() {
+        //To show the list in horizontal
+        layoutManager = new GridLayoutManager(getContext(),
+                1,
+                GridLayoutManager.HORIZONTAL,
+                false);
+
+        return layoutManager;
+    }
+
+    private void recyclerviewSetup() {
 
         //Adapter
-        moviesAdapter = new MoviesAdapter(movies, getContext());
-
-        //To show the list in horizontal
-        layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false);
+        popularMoviesAdapter = new MoviesAdapter(popularMoviesList, getContext());
+        topRatedMoviesAdapter = new MoviesAdapter(topRatedMoviesList, getContext());
 
         //Recyclerview setup
         popularRecyclerview = getActivity().findViewById(R.id.popularMoviesRecyclerview);
-        popularRecyclerview.setLayoutManager(layoutManager);
-        popularRecyclerview.setAdapter(moviesAdapter);
+        popularRecyclerview.setLayoutManager(layoutManager());
+        popularRecyclerview.setAdapter(popularMoviesAdapter);
+
+        topRatedMoviesRecyclerview = getActivity().findViewById(R.id.topRatedMoviesRecyclerview);
+        topRatedMoviesRecyclerview.setLayoutManager(layoutManager());
+        topRatedMoviesRecyclerview.setAdapter(topRatedMoviesAdapter);
+
 
     }
 
@@ -102,23 +116,54 @@ public class MoviesFragment extends Fragment {
         popularMovies.enqueue(new Callback<MoviesResponse>() {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
-                //Show the layout
-                noInternetMessage.setVisibility(View.INVISIBLE);
-                moviesLayout.setVisibility(View.VISIBLE);
-
+                showMoviesLayout();
                 MoviesResponse moviesResponse = response.body();
-                List<Movie> results = moviesResponse.getResults();
-                recyclerviewSetup(results);
+                popularMoviesList = moviesResponse.getResults();
+                recyclerviewSetup();
 
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                moviesLayout.setVisibility(View.INVISIBLE);
-                noInternetMessage.setVisibility(View.VISIBLE);
+                hideMoviesLayout();
 
             }
         });
+
+        //Calling toprated movies
+        Call<MoviesResponse> topRatedMovies = api.getTopRatedMovies(ApiService.api_key,
+                language,
+                page);
+
+        topRatedMovies.enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                showMoviesLayout();
+                MoviesResponse moviesResponse = response.body();
+                topRatedMoviesList = moviesResponse.getResults();
+                recyclerviewSetup();
+
+            }
+
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                hideMoviesLayout();
+
+            }
+        });
+    }
+
+    private void hideMoviesLayout() {
+        //Show error view and hide movies layout
+        moviesLayout.setVisibility(View.INVISIBLE);
+        noInternetMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void showMoviesLayout() {
+        //Show the layout, hide the error view
+        noInternetMessage.setVisibility(View.INVISIBLE);
+        moviesLayout.setVisibility(View.VISIBLE);
+
     }
 
 }
