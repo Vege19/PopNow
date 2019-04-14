@@ -1,12 +1,10 @@
 package github.vege19.popnow.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import github.vege19.popnow.Adapters.MoviesAdapter;
 import github.vege19.popnow.Models.Movie;
@@ -32,12 +29,12 @@ public class MoviesFragment extends Fragment {
 
     private Retrofit retrofit;
     private ApiService api;
-    private MoviesAdapter popularMoviesAdapter, topRatedMoviesAdapter;
-    private RecyclerView popularRecyclerview, topRatedMoviesRecyclerview;
-    private RecyclerView.LayoutManager layoutManager;
+    private MoviesAdapter popularMoviesAdapter, topRatedMoviesAdapter, upcomingMoviesAdapter;
+    private RecyclerView popularRecyclerview, topRatedMoviesRecyclerview, upcomingRecyclerview;
     private LinearLayout noInternetMessage, moviesLayout;
     private List<Movie> popularMoviesList = new ArrayList<>();
     private List<Movie> topRatedMoviesList = new ArrayList<>();
+    private List<Movie> upcomingMoviesList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -53,6 +50,11 @@ public class MoviesFragment extends Fragment {
         noInternetMessage = getActivity().findViewById(R.id.moviesNoInternetMessage);
         moviesLayout = getActivity().findViewById(R.id.moviesLayout);
 
+        //all views starts invisible
+        noInternetMessage.setVisibility(View.INVISIBLE);
+        moviesLayout.setVisibility(View.INVISIBLE);
+
+        //init content
         retrofitSetup();
 
     }
@@ -61,15 +63,11 @@ public class MoviesFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //all views starts invisible
-        noInternetMessage.setVisibility(View.INVISIBLE);
-        moviesLayout.setVisibility(View.INVISIBLE);
-
     }
 
     private RecyclerView.LayoutManager layoutManager() {
         //To show the list in horizontal
-        layoutManager = new GridLayoutManager(getContext(),
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),
                 1,
                 GridLayoutManager.HORIZONTAL,
                 false);
@@ -82,6 +80,8 @@ public class MoviesFragment extends Fragment {
         //Adapter
         popularMoviesAdapter = new MoviesAdapter(popularMoviesList, getContext());
         topRatedMoviesAdapter = new MoviesAdapter(topRatedMoviesList, getContext());
+        upcomingMoviesAdapter = new MoviesAdapter(upcomingMoviesList, getContext());
+
 
         //Recyclerview setup
         popularRecyclerview = getActivity().findViewById(R.id.popularMoviesRecyclerview);
@@ -91,6 +91,10 @@ public class MoviesFragment extends Fragment {
         topRatedMoviesRecyclerview = getActivity().findViewById(R.id.topRatedMoviesRecyclerview);
         topRatedMoviesRecyclerview.setLayoutManager(layoutManager());
         topRatedMoviesRecyclerview.setAdapter(topRatedMoviesAdapter);
+
+        upcomingRecyclerview = getActivity().findViewById(R.id.upcomingMoviesRecyclerview);
+        upcomingRecyclerview.setLayoutManager(layoutManager());
+        upcomingRecyclerview.setAdapter(upcomingMoviesAdapter);
 
 
     }
@@ -141,6 +145,28 @@ public class MoviesFragment extends Fragment {
                 showMoviesLayout();
                 MoviesResponse moviesResponse = response.body();
                 topRatedMoviesList = moviesResponse.getResults();
+                recyclerviewSetup();
+
+            }
+
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                hideMoviesLayout();
+
+            }
+        });
+
+        //Calling upcoming movies
+        Call<MoviesResponse> upcomingMovies = api.getUpcomingMovies(ApiService.api_key,
+                language,
+                page);
+
+        upcomingMovies.enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                showMoviesLayout();
+                MoviesResponse moviesResponse = response.body();
+                upcomingMoviesList = moviesResponse.getResults();
                 recyclerviewSetup();
 
             }
