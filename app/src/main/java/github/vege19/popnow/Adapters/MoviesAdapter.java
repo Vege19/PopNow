@@ -1,6 +1,7 @@
 package github.vege19.popnow.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import github.vege19.popnow.Models.Movie;
+import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 
@@ -36,11 +38,22 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+        final Movie movie = movies.get(position);
 
         Glide.with(context)
                 .load(ApiService.imageURL + movie.getPoster_path())
                 .into(holder.moviePoster);
+
+        //Intent to details
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                intent.putExtra("movieDetails", movie);
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 
