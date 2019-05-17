@@ -19,6 +19,7 @@ import github.vege19.popnow.Models.Movie;
 import github.vege19.popnow.Models.MoviesResponse;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
+import github.vege19.popnow.Retrofit.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,15 +106,8 @@ public class MoviesFragment extends Fragment {
         String language = getActivity().getResources().getString(R.string.language);
         int page = 1;
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.base_url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        api = retrofit.create(ApiService.class);
-
         //Calling popular movies
-        Call<MoviesResponse> popularMovies = api.getPopularMovies(ApiService.api_key,
+        Call<MoviesResponse> popularMovies = RetrofitClient.getInstance().getApi().getPopularMovies(ApiService.api_key,
                 language,
                 page);
 
@@ -135,7 +129,7 @@ public class MoviesFragment extends Fragment {
         });
 
         //Calling toprated movies
-        Call<MoviesResponse> topRatedMovies = api.getTopRatedMovies(ApiService.api_key,
+        Call<MoviesResponse> topRatedMovies = RetrofitClient.getInstance().getApi().getTopRatedMovies(ApiService.api_key,
                 language,
                 page);
 
@@ -157,7 +151,7 @@ public class MoviesFragment extends Fragment {
         });
 
         //Calling upcoming movies
-        Call<MoviesResponse> upcomingMovies = api.getUpcomingMovies(ApiService.api_key,
+        Call<MoviesResponse> upcomingMovies = RetrofitClient.getInstance().getApi().getUpcomingMovies(ApiService.api_key,
                 language,
                 page);
 
