@@ -17,6 +17,10 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigationView;
     private FragmentManager fragmentManager;
 
+    //Fragments
+    private Fragment moviesFragment;
+    private Fragment tvshowsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
     //Init fragments and bottom navigation view functionality
     private void initContent() {
 
-        //Fragments
-        final Fragment moviesFragment = new MoviesFragment();
-        final Fragment tvshowsFragment = new TVShowsFragment();
+        moviesFragment = new MoviesFragment();
+        tvshowsFragment = new TVShowsFragment();
 
         fragmentManager = getSupportFragmentManager();
 

@@ -23,13 +23,9 @@ import github.vege19.popnow.Retrofit.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MoviesFragment extends Fragment {
 
-    private Retrofit retrofit;
-    private ApiService api;
     private MoviesAdapter popularMoviesAdapter, topRatedMoviesAdapter, upcomingMoviesAdapter;
     private RecyclerView popularRecyclerview, topRatedMoviesRecyclerview, upcomingRecyclerview;
     private LinearLayout noInternetMessage, moviesLayout;

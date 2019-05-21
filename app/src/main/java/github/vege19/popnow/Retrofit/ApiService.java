@@ -1,8 +1,10 @@
 package github.vege19.popnow.Retrofit;
 
+import github.vege19.popnow.Models.CastResponse;
 import github.vege19.popnow.Models.MoviesResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -28,6 +30,11 @@ public interface ApiService {
     Call<MoviesResponse> getUpcomingMovies(@Query("api_key") String api_key,
                                            @Query("language") String language,
                                            @Query("page") int page);
+
+    //Get credits from a movie
+    @GET("movie/{movie_id}/credits")
+    Call<CastResponse> getCasts(@Path("movie_id") int movie_id,
+                                @Query("api_key") String api_key);
 
 
 }
