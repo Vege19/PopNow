@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import github.vege19.popnow.Models.Cast;
+import github.vege19.popnow.Models.Credits.Cast;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 

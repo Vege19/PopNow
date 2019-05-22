@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import github.vege19.popnow.Adapters.CastAdapter;
-import github.vege19.popnow.Models.CastResponse;
+import github.vege19.popnow.Models.Credits.CastResponse;
 import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;

@@ -13,7 +13,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import github.vege19.popnow.Models.Movie;
+import github.vege19.popnow.Models.Movie.Movie;
 import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;

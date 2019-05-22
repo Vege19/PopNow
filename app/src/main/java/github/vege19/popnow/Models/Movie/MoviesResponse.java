@@ -1,6 +1,8 @@
-package github.vege19.popnow.Models;
+package github.vege19.popnow.Models.Movie;
 
 import java.util.List;
+
+import github.vege19.popnow.Models.Movie.Movie;
 
 public class MoviesResponse {
 

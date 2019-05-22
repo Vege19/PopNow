@@ -1,4 +1,4 @@
-package github.vege19.popnow.Models;
+package github.vege19.popnow.Models.Movie;
 
 import java.io.Serializable;
 

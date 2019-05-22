@@ -2,20 +2,17 @@ package github.vege19.popnow;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import github.vege19.popnow.Adapters.CastAdapter;
 import github.vege19.popnow.Adapters.MovieDetailsAdapter;
 import github.vege19.popnow.Fragments.CastFragment;
-import github.vege19.popnow.Models.Movie;
+import github.vege19.popnow.Fragments.OverViewFragment;
+import github.vege19.popnow.Models.Movie.Movie;
 import github.vege19.popnow.Retrofit.ApiService;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
@@ -28,6 +25,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MovieDetailsAdapter mAdapter;
     private ViewPager mViewPager;
     public static int movie_id;
+    public static String overview;
+    public static Integer[] genre_ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +37,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Movie movie = (Movie) getIntent().getSerializableExtra("movieDetails");
         //save the movie id
         movie_id = movie.getId();
+        overview = movie.getOverview();
+        genre_ids = movie.getGenre_ids();
 
         //Start the tabs
         initFragments();
@@ -73,6 +74,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         //create adapter for the viewpager and add fragments
         mAdapter = new MovieDetailsAdapter(getSupportFragmentManager());
+        mAdapter.addFragment(new OverViewFragment(), "Overview");
         mAdapter.addFragment(new CastFragment(), "Cast");
 
         //set adapter to viewpager
