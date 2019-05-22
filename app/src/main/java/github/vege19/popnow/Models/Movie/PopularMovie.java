@@ -2,7 +2,7 @@ package github.vege19.popnow.Models.Movie;
 
 import java.io.Serializable;
 
-public class Movie implements Serializable {
+public class PopularMovie implements Serializable {
 
     private String poster_path;
     private boolean adult;

@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import github.vege19.popnow.Adapters.MoviesAdapter;
-import github.vege19.popnow.Models.Movie.Movie;
-import github.vege19.popnow.Models.Movie.MoviesResponse;
+import github.vege19.popnow.Models.Movie.PopularMovie;
+import github.vege19.popnow.Models.Movie.PopularMoviesResponse;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 import github.vege19.popnow.Retrofit.RetrofitClient;
@@ -29,9 +29,9 @@ public class MoviesFragment extends Fragment {
     private MoviesAdapter popularMoviesAdapter, topRatedMoviesAdapter, upcomingMoviesAdapter;
     private RecyclerView popularRecyclerview, topRatedMoviesRecyclerview, upcomingRecyclerview;
     private LinearLayout noInternetMessage, moviesLayout;
-    private List<Movie> popularMoviesList = new ArrayList<>();
-    private List<Movie> topRatedMoviesList = new ArrayList<>();
-    private List<Movie> upcomingMoviesList = new ArrayList<>();
+    private List<PopularMovie> popularMoviesList = new ArrayList<>();
+    private List<PopularMovie> topRatedMoviesList = new ArrayList<>();
+    private List<PopularMovie> upcomingMoviesList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -103,66 +103,66 @@ public class MoviesFragment extends Fragment {
         int page = 1;
 
         //Calling popular movies
-        Call<MoviesResponse> popularMovies = RetrofitClient.getInstance().getApi().getPopularMovies(ApiService.api_key,
+        Call<PopularMoviesResponse> popularMovies = RetrofitClient.getInstance().getApi().getPopularMovies(ApiService.api_key,
                 language,
                 page);
 
-        popularMovies.enqueue(new Callback<MoviesResponse>() {
+        popularMovies.enqueue(new Callback<PopularMoviesResponse>() {
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+            public void onResponse(Call<PopularMoviesResponse> call, Response<PopularMoviesResponse> response) {
                 showMoviesLayout();
-                MoviesResponse moviesResponse = response.body();
-                popularMoviesList = moviesResponse.getResults();
+                PopularMoviesResponse popularMoviesResponse = response.body();
+                popularMoviesList = popularMoviesResponse.getResults();
                 recyclerviewSetup();
 
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailure(Call<PopularMoviesResponse> call, Throwable t) {
                 hideMoviesLayout();
 
             }
         });
 
         //Calling toprated movies
-        Call<MoviesResponse> topRatedMovies = RetrofitClient.getInstance().getApi().getTopRatedMovies(ApiService.api_key,
+        Call<PopularMoviesResponse> topRatedMovies = RetrofitClient.getInstance().getApi().getTopRatedMovies(ApiService.api_key,
                 language,
                 page);
 
-        topRatedMovies.enqueue(new Callback<MoviesResponse>() {
+        topRatedMovies.enqueue(new Callback<PopularMoviesResponse>() {
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+            public void onResponse(Call<PopularMoviesResponse> call, Response<PopularMoviesResponse> response) {
                 showMoviesLayout();
-                MoviesResponse moviesResponse = response.body();
-                topRatedMoviesList = moviesResponse.getResults();
+                PopularMoviesResponse popularMoviesResponse = response.body();
+                topRatedMoviesList = popularMoviesResponse.getResults();
                 recyclerviewSetup();
 
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailure(Call<PopularMoviesResponse> call, Throwable t) {
                 hideMoviesLayout();
 
             }
         });
 
         //Calling upcoming movies
-        Call<MoviesResponse> upcomingMovies = RetrofitClient.getInstance().getApi().getUpcomingMovies(ApiService.api_key,
+        Call<PopularMoviesResponse> upcomingMovies = RetrofitClient.getInstance().getApi().getUpcomingMovies(ApiService.api_key,
                 language,
                 page);
 
-        upcomingMovies.enqueue(new Callback<MoviesResponse>() {
+        upcomingMovies.enqueue(new Callback<PopularMoviesResponse>() {
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+            public void onResponse(Call<PopularMoviesResponse> call, Response<PopularMoviesResponse> response) {
                 showMoviesLayout();
-                MoviesResponse moviesResponse = response.body();
-                upcomingMoviesList = moviesResponse.getResults();
+                PopularMoviesResponse popularMoviesResponse = response.body();
+                upcomingMoviesList = popularMoviesResponse.getResults();
                 recyclerviewSetup();
 
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailure(Call<PopularMoviesResponse> call, Throwable t) {
                 hideMoviesLayout();
 
             }

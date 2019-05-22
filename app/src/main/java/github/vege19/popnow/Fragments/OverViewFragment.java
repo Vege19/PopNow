@@ -1,7 +1,6 @@
 package github.vege19.popnow.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,7 @@ public class OverViewFragment extends Fragment {
 
         //set overview
         movieOverview = getActivity().findViewById(R.id.movieOverview);
-        movieOverview.setText(MovieDetailsActivity.overview);
+        movieOverview.setText(MovieDetailsActivity.overview + MovieDetailsActivity.overview);
 
         initGenresRecyclerview();
 

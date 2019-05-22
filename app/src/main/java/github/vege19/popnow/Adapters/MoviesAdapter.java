@@ -13,18 +13,18 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import github.vege19.popnow.Models.Movie.Movie;
+import github.vege19.popnow.Models.Movie.PopularMovie;
 import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
-    private List<Movie> movies;
+    private List<PopularMovie> popularMovies;
     private Context context;
 
-    public MoviesAdapter(List<Movie> movies, Context context) {
-        this.movies = movies;
+    public MoviesAdapter(List<PopularMovie> popularMovies, Context context) {
+        this.popularMovies = popularMovies;
         this.context = context;
     }
 
@@ -38,10 +38,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Movie movie = movies.get(position);
+        final PopularMovie popularMovie = popularMovies.get(position);
 
         Glide.with(context)
-                .load(ApiService.imageURL + movie.getPoster_path())
+                .load(ApiService.imageURL + popularMovie.getPoster_path())
                 .into(holder.moviePoster);
 
         //Intent to details
@@ -49,7 +49,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MovieDetailsActivity.class);
-                intent.putExtra("movieDetails", movie);
+                intent.putExtra("movieDetails", popularMovie);
                 context.startActivity(intent);
 
             }
@@ -59,7 +59,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return popularMovies.size();
 
     }
 

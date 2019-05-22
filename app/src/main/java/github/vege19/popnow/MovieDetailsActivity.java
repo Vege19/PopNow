@@ -7,7 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 import github.vege19.popnow.Adapters.MovieDetailsAdapter;
 import github.vege19.popnow.Fragments.CastFragment;
 import github.vege19.popnow.Fragments.OverViewFragment;
-import github.vege19.popnow.Models.Movie.Movie;
+import github.vege19.popnow.Models.Movie.PopularMovie;
 import github.vege19.popnow.Retrofit.ApiService;
 
 import android.os.Bundle;
@@ -33,12 +33,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
-        //Fetch movie attrs
-        Movie movie = (Movie) getIntent().getSerializableExtra("movieDetails");
-        //save the movie id
-        movie_id = movie.getId();
-        overview = movie.getOverview();
-        genre_ids = movie.getGenre_ids();
+        //Fetch popularMovie attrs
+        PopularMovie popularMovie = (PopularMovie) getIntent().getSerializableExtra("movieDetails");
+        //save the popularMovie id
+        movie_id = popularMovie.getId();
+        overview = popularMovie.getOverview();
+        genre_ids = popularMovie.getGenre_ids();
 
         //Start the tabs
         initFragments();
@@ -50,11 +50,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_round_arrow_back_24px);
 
-        getSupportActionBar().setTitle(movie.getTitle());
-        getSupportActionBar().setSubtitle(movie.getRelease_date());
+        getSupportActionBar().setTitle(popularMovie.getTitle());
+        getSupportActionBar().setSubtitle(popularMovie.getRelease_date());
 
         Glide.with(this)
-                .load(ApiService.imageURL + movie.getBackdrop_path())
+                .load(ApiService.imageURL + popularMovie.getBackdrop_path())
                 .into(movieBackdrop);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

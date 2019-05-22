@@ -2,7 +2,7 @@ package github.vege19.popnow.Retrofit;
 
 import github.vege19.popnow.Models.Credits.CastResponse;
 import github.vege19.popnow.Models.Genre.GenresResponse;
-import github.vege19.popnow.Models.Movie.MoviesResponse;
+import github.vege19.popnow.Models.Movie.PopularMoviesResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -17,21 +17,21 @@ public interface ApiService {
 
     //Get a list of popular movies
     @GET("movie/popular")
-    Call<MoviesResponse> getPopularMovies(@Query("api_key") String api_key,
-                                                @Query("language") String language,
-                                                @Query("page") int page);
+    Call<PopularMoviesResponse> getPopularMovies(@Query("api_key") String api_key,
+                                                 @Query("language") String language,
+                                                 @Query("page") int page);
 
     //Get a list of top rated movies
     @GET("movie/top_rated")
-    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String api_key,
-                                          @Query("language") String language,
-                                          @Query("page") int page);
+    Call<PopularMoviesResponse> getTopRatedMovies(@Query("api_key") String api_key,
+                                                  @Query("language") String language,
+                                                  @Query("page") int page);
 
     //Get a list of upcoming movies
     @GET("movie/upcoming")
-    Call<MoviesResponse> getUpcomingMovies(@Query("api_key") String api_key,
-                                           @Query("language") String language,
-                                           @Query("page") int page);
+    Call<PopularMoviesResponse> getUpcomingMovies(@Query("api_key") String api_key,
+                                                  @Query("language") String language,
+                                                  @Query("page") int page);
 
     //Get credits from a movie
     @GET("movie/{movie_id}/credits")
