@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,8 @@ import retrofit2.Response;
 public class OverViewFragment extends Fragment {
 
     private RecyclerView genresRecyclerview;
-    private TextView movieOverview;
+    private TextView movieOverview, movieReleaseDate, movieVoteAverage;
+    private RatingBar movieRatingBar;
 
     @Nullable
     @Override
@@ -49,6 +51,16 @@ public class OverViewFragment extends Fragment {
         //set overview
         movieOverview = getActivity().findViewById(R.id.movieOverview);
         movieOverview.setText(MovieDetailsActivity.overview + MovieDetailsActivity.overview);
+
+        //set release date
+        movieReleaseDate = getActivity().findViewById(R.id.movieReleaseDate);
+        movieReleaseDate.setText(MovieDetailsActivity.release_date);
+
+        //set movie rating
+        movieVoteAverage = getActivity().findViewById(R.id.movieVoteAverage);
+        movieVoteAverage.setText(String.valueOf(MovieDetailsActivity.vote_average));
+        movieRatingBar = getActivity().findViewById(R.id.movieRatingBar);
+        movieRatingBar.setProgress((int)MovieDetailsActivity.vote_average);
 
         initGenresRecyclerview();
 

@@ -25,7 +25,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MovieDetailsAdapter mAdapter;
     private ViewPager mViewPager;
     public static int movie_id;
-    public static String overview;
+    public static String overview, release_date;
+    public static float vote_average;
     public static Integer[] genre_ids;
 
     @Override
@@ -35,10 +36,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         //Fetch popularMovie attrs
         PopularMovie popularMovie = (PopularMovie) getIntent().getSerializableExtra("movieDetails");
-        //save the popularMovie id
+        //save movie details
         movie_id = popularMovie.getId();
         overview = popularMovie.getOverview();
         genre_ids = popularMovie.getGenre_ids();
+        release_date = popularMovie.getRelease_date();
+        vote_average = popularMovie.getVote_average();
 
         //Start the tabs
         initFragments();
