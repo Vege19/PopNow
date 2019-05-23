@@ -50,7 +50,7 @@ public class OverViewFragment extends Fragment {
 
         //set overview
         movieOverview = getActivity().findViewById(R.id.movieOverview);
-        movieOverview.setText(MovieDetailsActivity.overview + MovieDetailsActivity.overview);
+        movieOverview.setText(MovieDetailsActivity.overview);
 
         //set release date
         movieReleaseDate = getActivity().findViewById(R.id.movieReleaseDate);
