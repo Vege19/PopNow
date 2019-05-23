@@ -2,10 +2,10 @@ package github.vege19.popnow.Models.Video;
 
 import java.util.List;
 
-public class MovieVideosResponse {
+public class VideosResponse {
 
     private int id;
-    private List<MovieVideo> results;
+    private List<Video> results;
 
     public int getId() {
         return id;
@@ -15,11 +15,11 @@ public class MovieVideosResponse {
         this.id = id;
     }
 
-    public List<MovieVideo> getResults() {
+    public List<Video> getResults() {
         return results;
     }
 
-    public void setResults(List<MovieVideo> results) {
+    public void setResults(List<Video> results) {
         this.results = results;
     }
 }

@@ -57,7 +57,7 @@ public class MovieCastFragment extends Fragment {
         castRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 
         //make the retrofit call
-        Call<CastResponse> castResponseCall = RetrofitClient.getInstance().getApi().getCasts(MovieDetailsActivity.movie_id, ApiService.api_key);
+        Call<CastResponse> castResponseCall = RetrofitClient.getInstance().getApi().getMovieCasts(MovieDetailsActivity.movie_id, ApiService.api_key);
 
         castResponseCall.enqueue(new Callback<CastResponse>() {
             @Override

@@ -1,6 +1,6 @@
 package github.vege19.popnow.Models.Video;
 
-public class MovieVideo {
+public class Video {
 
     private String id;
     private String iso_639_1;

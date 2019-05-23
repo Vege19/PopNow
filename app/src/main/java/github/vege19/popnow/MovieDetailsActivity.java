@@ -9,8 +9,8 @@ import github.vege19.popnow.Fragments.Movie.MovieCastFragment;
 import github.vege19.popnow.Fragments.Movie.MovieReviewsFragment;
 import github.vege19.popnow.Fragments.Movie.MovieOverviewFragment;
 import github.vege19.popnow.Models.Movie.Movie;
-import github.vege19.popnow.Models.Video.MovieVideo;
-import github.vege19.popnow.Models.Video.MovieVideosResponse;
+import github.vege19.popnow.Models.Video.Video;
+import github.vege19.popnow.Models.Video.VideosResponse;
 import github.vege19.popnow.Retrofit.ApiService;
 import github.vege19.popnow.Retrofit.RetrofitClient;
 import retrofit2.Call;
@@ -110,21 +110,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //if the movie has trailers makes the call
         if (video != true) {
             //video info call
-            Call<MovieVideosResponse> movieVideosResponseCall = RetrofitClient.getInstance().getApi().getMovieVideos(movie_id,
+            Call<VideosResponse> movieVideosResponseCall = RetrofitClient.getInstance().getApi().getMovieVideos(movie_id,
                     ApiService.api_key,
                     ApiService.language);
 
-            movieVideosResponseCall.enqueue(new Callback<MovieVideosResponse>() {
+            movieVideosResponseCall.enqueue(new Callback<VideosResponse>() {
                 @Override
-                public void onResponse(Call<MovieVideosResponse> call, Response<MovieVideosResponse> response) {
+                public void onResponse(Call<VideosResponse> call, Response<VideosResponse> response) {
                     //get movie video
-                    final MovieVideo movieVideo = response.body().getResults().get(0);
+                    final Video video = response.body().getResults().get(0);
 
                     //Intent to youtube
                     playVideoButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_base_url + movieVideo.getKey()));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube_base_url + video.getKey()));
                             startActivity(intent);
                         }
                     });
@@ -132,7 +132,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<MovieVideosResponse> call, Throwable t) {
+                public void onFailure(Call<VideosResponse> call, Throwable t) {
                     Toast.makeText(MovieDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
 
                 }

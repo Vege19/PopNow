@@ -5,7 +5,7 @@ import github.vege19.popnow.Models.Genre.GenresResponse;
 import github.vege19.popnow.Models.Movie.MoviesResponse;
 import github.vege19.popnow.Models.Review.ReviewsResponse;
 import github.vege19.popnow.Models.TvShow.TvShowsResponse;
-import github.vege19.popnow.Models.Video.MovieVideosResponse;
+import github.vege19.popnow.Models.Video.VideosResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -38,7 +38,12 @@ public interface ApiService {
 
     //Get credits from a movie
     @GET("movie/{movie_id}/credits")
-    Call<CastResponse> getCasts(@Path("movie_id") int movie_id,
+    Call<CastResponse> getMovieCasts(@Path("movie_id") int movie_id,
+                                @Query("api_key") String api_key);
+
+    //Get credits from tv shows
+    @GET("tv/{tv_id}/credits")
+    Call<CastResponse> getTvShowCasts(@Path("tv_id") int tv_id,
                                 @Query("api_key") String api_key);
 
     //Get a list of movie genres
@@ -48,9 +53,15 @@ public interface ApiService {
 
     //Get movie videos
     @GET("movie/{movie_id}/videos")
-    Call<MovieVideosResponse> getMovieVideos(@Path("movie_id") int movie_id,
-                                             @Query("api_key") String api_key,
-                                             @Query("language") String language);
+    Call<VideosResponse> getMovieVideos(@Path("movie_id") int movie_id,
+                                        @Query("api_key") String api_key,
+                                        @Query("language") String language);
+
+    //Get tv show videos
+    @GET("tv/{tv_id}/videos")
+    Call<VideosResponse> getTvShowVideos(@Path("tv_id") int tv_id,
+                                         @Query("api_key") String api_key,
+                                         @Query("language") String language);
 
     //GET movie reviews
     @GET("movie/{movie_id}/reviews")
