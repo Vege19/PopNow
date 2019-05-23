@@ -5,9 +5,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import github.vege19.popnow.Adapters.MovieDetailsAdapter;
-import github.vege19.popnow.Fragments.CastFragment;
-import github.vege19.popnow.Fragments.MovieReviewsFragment;
-import github.vege19.popnow.Fragments.OverViewFragment;
+import github.vege19.popnow.Fragments.Movie.MovieCastFragment;
+import github.vege19.popnow.Fragments.Movie.MovieReviewsFragment;
+import github.vege19.popnow.Fragments.Movie.MovieOverviewFragment;
 import github.vege19.popnow.Models.Movie.Movie;
 import github.vege19.popnow.Models.Video.MovieVideo;
 import github.vege19.popnow.Models.Video.MovieVideosResponse;
@@ -91,8 +91,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         //create adapter for the viewpager and add fragments
         mAdapter = new MovieDetailsAdapter(getSupportFragmentManager());
-        mAdapter.addFragment(new OverViewFragment(), "Overview");
-        mAdapter.addFragment(new CastFragment(), "Cast");
+        mAdapter.addFragment(new MovieOverviewFragment(), "Overview");
+        mAdapter.addFragment(new MovieCastFragment(), "Cast");
         mAdapter.addFragment(new MovieReviewsFragment(), "Reviews");
 
         //set adapter to viewpager

@@ -1,4 +1,4 @@
-package github.vege19.popnow.Fragments;
+package github.vege19.popnow.Fragments.Movie;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OverViewFragment extends Fragment {
+public class MovieOverviewFragment extends Fragment {
 
     private RecyclerView genresRecyclerview;
     private TextView movieOverview, movieReleaseDate, movieVoteAverage;

@@ -1,4 +1,4 @@
-package github.vege19.popnow.Fragments;
+package github.vege19.popnow.Fragments.Movie;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

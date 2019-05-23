@@ -1,6 +1,7 @@
 package github.vege19.popnow.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 import github.vege19.popnow.Models.TvShow.TvShow;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
+import github.vege19.popnow.TvShowDetailsActivity;
 
 public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.ViewHolder> {
 
@@ -36,12 +38,22 @@ public class TvShowsAdapter extends RecyclerView.Adapter<TvShowsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TvShow tvShow = tvShows.get(position);
+        final TvShow tvShow = tvShows.get(position);
 
         //load poster image
         Glide.with(context)
                 .load(ApiService.imageURL + tvShow.getPoster_path())
                 .into(holder.poster);
+
+        //intent to details
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, TvShowDetailsActivity.class);
+                intent.putExtra("tv_show_details", tvShow);
+                context.startActivity(intent);
+            }
+        });
 
     }
 

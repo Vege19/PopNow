@@ -1,4 +1,4 @@
-package github.vege19.popnow.Fragments;
+package github.vege19.popnow.Fragments.Movie;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -23,11 +23,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CastFragment extends Fragment {
+public class MovieCastFragment extends Fragment {
 
     private RecyclerView castRecyclerView;
 
-    public CastFragment() {
+    public MovieCastFragment() {
     }
 
     @Nullable

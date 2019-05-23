@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import github.vege19.popnow.Fragments.MoviesFragment;
-import github.vege19.popnow.Fragments.TVShowsFragment;
+import github.vege19.popnow.Fragments.Movie.MoviesFragment;
+import github.vege19.popnow.Fragments.TvShow.TVShowsFragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
