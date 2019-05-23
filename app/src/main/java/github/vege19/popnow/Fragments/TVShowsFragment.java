@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class TVShowsFragment extends Fragment {
 
-    private RecyclerView popularRecyclerview, topRatedRecyclerview;
+    private RecyclerView popularRecyclerview, topRatedRecyclerview, onAiringRecyclerview;
     private LinearLayout noInternetView, tvShowsLayout;
 
     @Nullable
@@ -51,8 +51,11 @@ public class TVShowsFragment extends Fragment {
         popularRecyclerview.setLayoutManager(layoutManager());
         topRatedRecyclerview = getActivity().findViewById(R.id.topRatedTvShowsRecyclerview);
         topRatedRecyclerview.setLayoutManager(layoutManager());
+        onAiringRecyclerview = getActivity().findViewById(R.id.onAiringTvShowsRecyclerview);
+        onAiringRecyclerview.setLayoutManager(layoutManager());
 
         //Load lists
+        loadOnAiringTvShows();
         loadPopularTvShows();
 
     }
@@ -81,6 +84,33 @@ public class TVShowsFragment extends Fragment {
 
             }
         });
+    }
+
+    private void loadOnAiringTvShows() {
+        //retrofit call
+        Call<TvShowsResponse> tvShowsResponseCall = RetrofitClient.getInstance().getApi().getOnAiringTvShows(ApiService.api_key,
+                ApiService.language);
+
+        tvShowsResponseCall.enqueue(new Callback<TvShowsResponse>() {
+            @Override
+            public void onResponse(Call<TvShowsResponse> call, Response<TvShowsResponse> response) {
+                //show views
+                showTvShowsLayout();
+                //fill recycler view
+                TvShowsResponse tvShowsResponse = response.body();
+                onAiringRecyclerview.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
+
+            }
+
+            @Override
+            public void onFailure(Call<TvShowsResponse> call, Throwable t) {
+                //hide views and show no internet message
+                hideTvShowsLayout();
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     /**Global layout manager**/

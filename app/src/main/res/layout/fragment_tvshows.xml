@@ -46,8 +46,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/popular_movies_title"
+                android:text="@string/on_airing"
                 style="@style/TextAppearance.AppCompat.Title"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/onAiringTvShowsRecyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/popular_movies_title"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_marginTop="16dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/popularTvShowsRecyclerview"
