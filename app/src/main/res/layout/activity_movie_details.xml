@@ -73,7 +73,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/movieDetailsTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="?actionBarSize"
             app:tabGravity="fill"
             app:tabMode="fixed"/>
 

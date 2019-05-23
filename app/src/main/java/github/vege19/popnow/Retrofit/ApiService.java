@@ -3,6 +3,7 @@ package github.vege19.popnow.Retrofit;
 import github.vege19.popnow.Models.Credits.CastResponse;
 import github.vege19.popnow.Models.Genre.GenresResponse;
 import github.vege19.popnow.Models.Movie.PopularMoviesResponse;
+import github.vege19.popnow.Models.Review.ReviewsResponse;
 import github.vege19.popnow.Models.Video.MovieVideosResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -49,6 +50,12 @@ public interface ApiService {
     Call<MovieVideosResponse> getMovieVideos(@Path("movie_id") int movie_id,
                                              @Query("api_key") String api_key,
                                              @Query("language") String language);
+
+    //GET movie reviews
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewsResponse> getMovieReviews(@Path("movie_id") int movie_id,
+                                          @Query("api_key") String api_key,
+                                          @Query("language") String language);
 
 
 }

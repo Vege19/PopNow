@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lorem"
-                style="@style/TextAppearance.MaterialComponents.Body1" />
+                style="@style/TextAppearance.MaterialComponents.Body2" />
 
             <View
                 android:layout_width="match_parent"
