@@ -68,5 +68,10 @@ public interface ApiService {
     Call<TvShowsResponse> getOnAiringTvShows(@Query("api_key") String api_key,
                                              @Query("language") String language);
 
+    //Get top rated tv Shows
+    @GET("tv/top_rated")
+    Call<TvShowsResponse> getTopRatedTvShows(@Query("api_key") String api_key,
+                                             @Query("language") String language);
+
 
 }

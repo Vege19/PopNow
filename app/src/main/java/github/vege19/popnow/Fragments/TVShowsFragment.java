@@ -57,6 +57,7 @@ public class TVShowsFragment extends Fragment {
         //Load lists
         loadOnAiringTvShows();
         loadPopularTvShows();
+        loadTopRatedTvShows();
 
     }
 
@@ -111,6 +112,32 @@ public class TVShowsFragment extends Fragment {
             }
         });
 
+    }
+
+    private void loadTopRatedTvShows() {
+        //retrofit call
+        Call<TvShowsResponse> tvShowsResponseCall = RetrofitClient.getInstance().getApi().getTopRatedTvShows(ApiService.api_key,
+                ApiService.language);
+
+        tvShowsResponseCall.enqueue(new Callback<TvShowsResponse>() {
+            @Override
+            public void onResponse(Call<TvShowsResponse> call, Response<TvShowsResponse> response) {
+                //show views
+                showTvShowsLayout();
+                //fill recycler view
+                TvShowsResponse tvShowsResponse = response.body();
+                topRatedRecyclerview.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
+
+            }
+
+            @Override
+            public void onFailure(Call<TvShowsResponse> call, Throwable t) {
+                //hide views and show no internet message
+                hideTvShowsLayout();
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     /**Global layout manager**/
