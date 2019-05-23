@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:layout_marginRight="16dp"
+    app:cardElevation="0dp">
+
+    <ImageView
+        android:id="@+id/tvShowPoster"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
+
+</androidx.cardview.widget.CardView>

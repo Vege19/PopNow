@@ -2,8 +2,9 @@ package github.vege19.popnow.Retrofit;
 
 import github.vege19.popnow.Models.Credits.CastResponse;
 import github.vege19.popnow.Models.Genre.GenresResponse;
-import github.vege19.popnow.Models.Movie.PopularMoviesResponse;
+import github.vege19.popnow.Models.Movie.MoviesResponse;
 import github.vege19.popnow.Models.Review.ReviewsResponse;
+import github.vege19.popnow.Models.TvShow.TvShowsResponse;
 import github.vege19.popnow.Models.Video.MovieVideosResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -19,21 +20,21 @@ public interface ApiService {
 
     //Get a list of popular movies
     @GET("movie/popular")
-    Call<PopularMoviesResponse> getPopularMovies(@Query("api_key") String api_key,
-                                                 @Query("language") String language,
-                                                 @Query("page") int page);
+    Call<MoviesResponse> getPopularMovies(@Query("api_key") String api_key,
+                                          @Query("language") String language,
+                                          @Query("page") int page);
 
     //Get a list of top rated movies
     @GET("movie/top_rated")
-    Call<PopularMoviesResponse> getTopRatedMovies(@Query("api_key") String api_key,
-                                                  @Query("language") String language,
-                                                  @Query("page") int page);
+    Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String api_key,
+                                           @Query("language") String language,
+                                           @Query("page") int page);
 
     //Get a list of upcoming movies
     @GET("movie/upcoming")
-    Call<PopularMoviesResponse> getUpcomingMovies(@Query("api_key") String api_key,
-                                                  @Query("language") String language,
-                                                  @Query("page") int page);
+    Call<MoviesResponse> getUpcomingMovies(@Query("api_key") String api_key,
+                                           @Query("language") String language,
+                                           @Query("page") int page);
 
     //Get credits from a movie
     @GET("movie/{movie_id}/credits")
@@ -56,6 +57,11 @@ public interface ApiService {
     Call<ReviewsResponse> getMovieReviews(@Path("movie_id") int movie_id,
                                           @Query("api_key") String api_key,
                                           @Query("language") String language);
+
+    //GET popular TV Shows
+    @GET("tv/popular")
+    Call<TvShowsResponse> getPopularTvShows(@Query("api_key") String api_key,
+                                            @Query("language") String language);
 
 
 }

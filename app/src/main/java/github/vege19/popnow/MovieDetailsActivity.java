@@ -8,7 +8,7 @@ import github.vege19.popnow.Adapters.MovieDetailsAdapter;
 import github.vege19.popnow.Fragments.CastFragment;
 import github.vege19.popnow.Fragments.MovieReviewsFragment;
 import github.vege19.popnow.Fragments.OverViewFragment;
-import github.vege19.popnow.Models.Movie.PopularMovie;
+import github.vege19.popnow.Models.Movie.Movie;
 import github.vege19.popnow.Models.Video.MovieVideo;
 import github.vege19.popnow.Models.Video.MovieVideosResponse;
 import github.vege19.popnow.Retrofit.ApiService;
@@ -46,15 +46,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
-        //Fetch popularMovie attrs
-        PopularMovie popularMovie = (PopularMovie) getIntent().getSerializableExtra("movieDetails");
+        //Fetch movie attrs
+        Movie movie = (Movie) getIntent().getSerializableExtra("movieDetails");
         //save movie details
-        movie_id = popularMovie.getId();
-        overview = popularMovie.getOverview();
-        genre_ids = popularMovie.getGenre_ids();
-        release_date = popularMovie.getRelease_date();
-        vote_average = popularMovie.getVote_average();
-        video = popularMovie.isVideo();
+        movie_id = movie.getId();
+        overview = movie.getOverview();
+        genre_ids = movie.getGenre_ids();
+        release_date = movie.getRelease_date();
+        vote_average = movie.getVote_average();
+        video = movie.isVideo();
 
         //Start the tabs
         initFragments();
@@ -66,11 +66,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_round_arrow_back_24px);
 
-        getSupportActionBar().setTitle(popularMovie.getTitle());
-        getSupportActionBar().setSubtitle(popularMovie.getRelease_date());
+        getSupportActionBar().setTitle(movie.getTitle());
+        getSupportActionBar().setSubtitle(movie.getRelease_date());
 
         Glide.with(this)
-                .load(ApiService.imageURL + popularMovie.getBackdrop_path())
+                .load(ApiService.imageURL + movie.getBackdrop_path())
                 .into(movieBackdrop);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

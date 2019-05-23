@@ -2,11 +2,11 @@ package github.vege19.popnow.Models.Movie;
 
 import java.util.List;
 
-public class PopularMoviesResponse {
+public class MoviesResponse {
 
     private int page;
     private int total_results;
-    private List<PopularMovie> results;
+    private List<Movie> results;
     private int total_pages;
 
     public int getPage() {
@@ -25,11 +25,11 @@ public class PopularMoviesResponse {
         this.total_results = total_results;
     }
 
-    public List<PopularMovie> getResults() {
+    public List<Movie> getResults() {
         return results;
     }
 
-    public void setResults(List<PopularMovie> results) {
+    public void setResults(List<Movie> results) {
         this.results = results;
     }
 
