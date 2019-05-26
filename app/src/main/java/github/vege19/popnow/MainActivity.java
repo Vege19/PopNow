@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import github.vege19.popnow.Fragments.Home.HomeFragment;
 import github.vege19.popnow.Fragments.Movie.MoviesFragment;
 import github.vege19.popnow.Fragments.TvShow.TVShowsFragment;
 
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     //Fragments
     private Fragment moviesFragment;
     private Fragment tvshowsFragment;
+    private Fragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
         moviesFragment = new MoviesFragment();
         tvshowsFragment = new TVShowsFragment();
+        homeFragment = new HomeFragment();
 
         fragmentManager = getSupportFragmentManager();
 
         //Setting movie fragment as first to load
         fragmentManager.beginTransaction()
-                .replace(R.id.navigationContainer, moviesFragment)
+                .replace(R.id.navigationContainer, homeFragment)
                 .commit();
 
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //Switch to select fragments
                 switch (menuItem.getItemId()) {
+                    case R.id.navigation_home:
+                        currentFragment = homeFragment;
+                        break;
                     case R.id.navigation_movies:
                         currentFragment = moviesFragment;
                         break;
