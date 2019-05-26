@@ -1,6 +1,7 @@
 package github.vege19.popnow.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import github.vege19.popnow.Models.Genre.Genre;
+import github.vege19.popnow.Models.Trending.Trending;
+import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 
 public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.ViewHolder> {

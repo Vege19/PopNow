@@ -9,6 +9,7 @@ import github.vege19.popnow.Fragments.Movie.MovieCastFragment;
 import github.vege19.popnow.Fragments.Movie.MovieReviewsFragment;
 import github.vege19.popnow.Fragments.Movie.MovieOverviewFragment;
 import github.vege19.popnow.Models.Movie.Movie;
+import github.vege19.popnow.Models.Trending.Trending;
 import github.vege19.popnow.Models.Video.Video;
 import github.vege19.popnow.Models.Video.VideosResponse;
 import github.vege19.popnow.Retrofit.ApiService;
@@ -35,9 +36,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MovieDetailsAdapter mAdapter;
     private ViewPager mViewPager;
     public static int movie_id;
-    public static String overview, release_date;
+    public static String overview, release_date, title, backdrop_path;
     public static float vote_average;
-    private static boolean video;
     public static Integer[] genre_ids;
     private String youtube_base_url = "https://www.youtube.com/watch?v=";
 
@@ -47,14 +47,31 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
 
         //Fetch movie attrs
+        //from movies fragment
         Movie movie = (Movie) getIntent().getSerializableExtra("movieDetails");
+        //from home fragment
+        Trending movieTrend = (Trending) getIntent().getSerializableExtra("trending_movie_details");
+
         //save movie details
-        movie_id = movie.getId();
-        overview = movie.getOverview();
-        genre_ids = movie.getGenre_ids();
-        release_date = movie.getRelease_date();
-        vote_average = movie.getVote_average();
-        video = movie.isVideo();
+        //if intent comes from movies
+        if (movie != null) {
+            movie_id = movie.getId();
+            overview = movie.getOverview();
+            genre_ids = movie.getGenre_ids();
+            release_date = movie.getRelease_date();
+            vote_average = movie.getVote_average();
+            title = movie.getTitle();
+            backdrop_path = movie.getBackdrop_path();
+            //if comes from home
+        } else if (movieTrend != null) {
+            movie_id = movieTrend.getId();
+            overview = movieTrend.getOverview();
+            genre_ids = movieTrend.getGenre_ids();
+            release_date = movieTrend.getRelease_date();
+            vote_average = movieTrend.getVote_average();
+            title = movieTrend.getTitle();
+            backdrop_path = movieTrend.getBackdrop_path();
+        }
 
         //Start the tabs
         initFragments();
@@ -68,11 +85,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_round_arrow_back_24px);
 
-        getSupportActionBar().setTitle(movie.getTitle());
-        getSupportActionBar().setSubtitle(movie.getRelease_date());
+        getSupportActionBar().setTitle(title);
 
         Glide.with(this)
-                .load(ApiService.imageURL + movie.getBackdrop_path())
+                .load(ApiService.imageURL + backdrop_path)
                 .into(movieBackdrop);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

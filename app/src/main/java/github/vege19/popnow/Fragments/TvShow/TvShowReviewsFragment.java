@@ -45,7 +45,7 @@ public class TvShowReviewsFragment extends Fragment {
 
     private void loadReviews() {
         //retrofit call
-        Call<ReviewsResponse> reviewsResponseCall = RetrofitClient.getInstance().getApi().getTvShowReviews(TvShowDetailsActivity.thisTvShow.getId(),
+        Call<ReviewsResponse> reviewsResponseCall = RetrofitClient.getInstance().getApi().getTvShowReviews(TvShowDetailsActivity.tv_id,
                 ApiService.api_key,
                 ApiService.language);
 

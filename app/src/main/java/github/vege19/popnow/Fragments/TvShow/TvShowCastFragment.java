@@ -45,7 +45,7 @@ public class TvShowCastFragment extends Fragment {
 
     private void loadCast() {
         //retrofit call
-        Call<CastResponse> castResponseCall = RetrofitClient.getInstance().getApi().getTvShowCasts(TvShowDetailsActivity.thisTvShow.getId(),
+        Call<CastResponse> castResponseCall = RetrofitClient.getInstance().getApi().getTvShowCasts(TvShowDetailsActivity.tv_id,
                 ApiService.api_key);
 
         castResponseCall.enqueue(new Callback<CastResponse>() {

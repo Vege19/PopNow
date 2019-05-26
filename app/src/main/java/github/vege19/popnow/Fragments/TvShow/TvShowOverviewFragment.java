@@ -47,17 +47,17 @@ public class TvShowOverviewFragment extends Fragment {
 
         //details
         overviewText = getActivity().findViewById(R.id.tvShowOverview);
-        overviewText.setText(TvShowDetailsActivity.thisTvShow.getOverview());
+        overviewText.setText(TvShowDetailsActivity.tv_overview);
 
         releaseDateText = getActivity().findViewById(R.id.tvShowReleaseDate);
-        releaseDateText.setText(TvShowDetailsActivity.thisTvShow.getFirst_air_date());
+        releaseDateText.setText(TvShowDetailsActivity.tv_first_air_date);
 
         voteAverageText = getActivity().findViewById(R.id.tvShowVoteAverage);
-        voteAverageText.setText(String.valueOf(TvShowDetailsActivity.thisTvShow.getVote_average()));
+        voteAverageText.setText(String.valueOf(TvShowDetailsActivity.tv_vote_average));
 
         //rating bar setup
         voteRatingBar = getActivity().findViewById(R.id.tvShowRatingBar);
-        voteRatingBar.setProgress((int)TvShowDetailsActivity.thisTvShow.getVote_average());
+        voteRatingBar.setProgress((int)TvShowDetailsActivity.tv_vote_average);
 
         //recycler view setup
         genresRecyclerview = getActivity().findViewById(R.id.tvShowGenresRecyclerview);
@@ -79,7 +79,7 @@ public class TvShowOverviewFragment extends Fragment {
                 GenresResponse genresResponse = response.body();
 
                 //genre id's of this tv show
-                Integer[] tvShow_genres = TvShowDetailsActivity.thisTvShow.getGenre_ids();
+                Integer[] tvShow_genres = TvShowDetailsActivity.tv_genre_ids;
                 List<Genre> thisGenres = new ArrayList<>();
 
                 //select the genres from all genres where matches with this tv show genres

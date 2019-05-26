@@ -35,9 +35,14 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private TvShowDetailsAdapter mAdapter;
-    public static TvShow thisTvShow;
     private ImageView backdropImage, playVideoButton;
     private String youtube_base_url = "https://www.youtube.com/watch?v=";
+
+    //attrs
+    public static String tv_name, tv_overview, tv_first_air_date, tv_backdrop_path;
+    public static float tv_vote_average;
+    public static Integer[] tv_genre_ids;
+    public static int tv_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +50,30 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tv_show_details);
 
         //fetch tv movie details data
-        thisTvShow = (TvShow) getIntent().getSerializableExtra("tv_show_details");
-        Log.d("debug", String.valueOf(thisTvShow.getId()));
+        TvShow tvShow = (TvShow) getIntent().getSerializableExtra("tv_show_details");
+        Trending tvShowTrend = (Trending) getIntent().getSerializableExtra("trending_tv_details");
+
+        //if intent came from tv shows fragment
+        if (tvShow != null) {
+            tv_id = tvShow.getId();
+            tv_name = tvShow.getName();
+            tv_overview = tvShow.getOverview();
+            tv_first_air_date = tvShow.getFirst_air_date();
+            tv_backdrop_path = tvShow.getBackdrop_path();
+            tv_vote_average = tvShow.getVote_average();
+            tv_genre_ids = tvShow.getGenre_ids();
+            //if came from home fragment
+        } else if (tvShowTrend != null) {
+            tv_id = tvShowTrend.getId();
+            tv_name = tvShowTrend.getName();
+            tv_overview = tvShowTrend.getOverview();
+            tv_first_air_date = tvShowTrend.getFirst_air_date();
+            tv_backdrop_path = tvShowTrend.getBackdrop_path();
+            tv_vote_average = tvShowTrend.getVote_average();
+            tv_genre_ids = tvShowTrend.getGenre_ids();
+        }
+
+        Log.d("debug", String.valueOf(tv_id));
 
         //enable video button
         playVideo();
@@ -54,7 +81,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         //set backdrop image
         backdropImage = findViewById(R.id.tvShowDetailsBackdrop);
         Glide.with(this)
-                .load(ApiService.imageURL + thisTvShow.getBackdrop_path())
+                .load(ApiService.imageURL + tv_backdrop_path)
                 .into(backdropImage);
 
         toolbarSetUp();
@@ -95,7 +122,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         });
 
         //set title
-        getSupportActionBar().setTitle(thisTvShow.getName());
+        getSupportActionBar().setTitle(tv_name);
 
     }
 
@@ -103,7 +130,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         playVideoButton = findViewById(R.id.playTvShowVideoButton);
 
         //make retrofit call
-        Call<VideosResponse> videosResponseCall = RetrofitClient.getInstance().getApi().getTvShowVideos(thisTvShow.getId(),
+        Call<VideosResponse> videosResponseCall = RetrofitClient.getInstance().getApi().getTvShowVideos(tv_id,
                 ApiService.api_key,
                 ApiService.language);
 

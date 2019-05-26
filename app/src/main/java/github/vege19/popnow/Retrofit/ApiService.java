@@ -14,7 +14,6 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    String base_url = "https://api.themoviedb.org/3/";
     String api_key = "888eed6d5b3879fea3cf535a3b85d827";
     String imageURL = "http://image.tmdb.org/t/p/w500";
     String language = "en-US";

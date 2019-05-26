@@ -50,6 +50,19 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.ViewHo
                 .load(ApiService.imageURL + trending.getBackdrop_path())
                 .into(holder.backdrop);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (trending.getRelease_date() != null) {
+                    /**ITEM IS MOVIE IF CONTAINS RELEASE_DATE**/
+                    initMovieDetails(trending);
+                } else if (trending.getFirst_air_date() != null) {
+                    /**ITEM IS TV SHOW IF CONTAINS FIRST_AIR_DATE**/
+                    initTvShowDetails(trending);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -69,6 +82,18 @@ public class TrendingAdapter extends RecyclerView.Adapter<TrendingAdapter.ViewHo
             title = itemView.findViewById(R.id.trendingTitle);
 
         }
+    }
+
+    private void initMovieDetails(Trending trending) {
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        intent.putExtra("trending_movie_details", trending);
+        context.startActivity(intent);
+    }
+
+    private void initTvShowDetails(Trending trending) {
+        Intent intent = new Intent(context, TvShowDetailsActivity.class);
+        intent.putExtra("trending_tv_details", trending);
+        context.startActivity(intent);
     }
 
 }
