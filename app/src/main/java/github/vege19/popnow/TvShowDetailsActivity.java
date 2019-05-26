@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import github.vege19.popnow.Adapters.TvShowDetailsAdapter;
 import github.vege19.popnow.Fragments.TvShow.TvShowCastFragment;
 import github.vege19.popnow.Fragments.TvShow.TvShowOverviewFragment;
-import github.vege19.popnow.Fragments.TvShow.TvShowsReviewsFragment;
+import github.vege19.popnow.Fragments.TvShow.TvShowReviewsFragment;
 import github.vege19.popnow.Models.TvShow.TvShow;
 import github.vege19.popnow.Models.Video.Video;
 import github.vege19.popnow.Models.Video.VideosResponse;
@@ -72,7 +72,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         mAdapter = new TvShowDetailsAdapter(getSupportFragmentManager());
         mAdapter.addFragment(new TvShowOverviewFragment(), "Overview");
         mAdapter.addFragment(new TvShowCastFragment(), "Cast");
-        mAdapter.addFragment(new TvShowsReviewsFragment(), "Reviews");
+        mAdapter.addFragment(new TvShowReviewsFragment(), "Reviews");
 
         //set adapter to viewpager
         mViewPager.setAdapter(mAdapter);

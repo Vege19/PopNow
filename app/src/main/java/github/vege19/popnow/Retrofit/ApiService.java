@@ -69,6 +69,12 @@ public interface ApiService {
                                           @Query("api_key") String api_key,
                                           @Query("language") String language);
 
+    //GET tv show reviews
+    @GET("tv/{tv_id}/reviews")
+    Call<ReviewsResponse> getTvShowReviews(@Path("tv_id") int tv_id,
+                                          @Query("api_key") String api_key,
+                                          @Query("language") String language);
+
     //GET popular TV Shows
     @GET("tv/popular")
     Call<TvShowsResponse> getPopularTvShows(@Query("api_key") String api_key,
