@@ -4,6 +4,7 @@ import github.vege19.popnow.Models.Credits.CastResponse;
 import github.vege19.popnow.Models.Genre.GenresResponse;
 import github.vege19.popnow.Models.Movie.MoviesResponse;
 import github.vege19.popnow.Models.Review.ReviewsResponse;
+import github.vege19.popnow.Models.Trending.TrendingResponse;
 import github.vege19.popnow.Models.TvShow.TvShowsResponse;
 import github.vege19.popnow.Models.Video.VideosResponse;
 import retrofit2.Call;
@@ -90,5 +91,8 @@ public interface ApiService {
     Call<TvShowsResponse> getTopRatedTvShows(@Query("api_key") String api_key,
                                              @Query("language") String language);
 
+    //get trending
+    @GET("trending/all/day")
+    Call<TrendingResponse> getTrendingContent(@Query("api_key") String api_key);
 
 }

@@ -19,6 +19,7 @@ import github.vege19.popnow.Adapters.TvShowDetailsAdapter;
 import github.vege19.popnow.Fragments.TvShow.TvShowCastFragment;
 import github.vege19.popnow.Fragments.TvShow.TvShowOverviewFragment;
 import github.vege19.popnow.Fragments.TvShow.TvShowReviewsFragment;
+import github.vege19.popnow.Models.Trending.Trending;
 import github.vege19.popnow.Models.TvShow.TvShow;
 import github.vege19.popnow.Models.Video.Video;
 import github.vege19.popnow.Models.Video.VideosResponse;
@@ -138,4 +139,5 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         });
 
     }
+
 }
