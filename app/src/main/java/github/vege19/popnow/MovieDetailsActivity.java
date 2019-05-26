@@ -59,6 +59,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //Start the tabs
         initFragments();
 
+        playTrailer();
+
         movieBackdrop = findViewById(R.id.movieDetailsBackdrop);
         toolbar = findViewById(R.id.movieDetailsToolbar);
 
@@ -79,8 +81,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 MovieDetailsActivity.this.finish();
             }
         });
-
-        playTrailer();
 
     }
 
@@ -107,16 +107,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //get play button view
         playVideoButton = findViewById(R.id.playMovieVideoButton);
 
-        //if the movie has trailers makes the call
-        if (video != true) {
-            //video info call
-            Call<VideosResponse> movieVideosResponseCall = RetrofitClient.getInstance().getApi().getMovieVideos(movie_id,
-                    ApiService.api_key,
-                    ApiService.language);
+        //video info call
+        Call<VideosResponse> movieVideosResponseCall = RetrofitClient.getInstance().getApi().getMovieVideos(movie_id,
+                ApiService.api_key,
+                ApiService.language);
 
-            movieVideosResponseCall.enqueue(new Callback<VideosResponse>() {
-                @Override
-                public void onResponse(Call<VideosResponse> call, Response<VideosResponse> response) {
+        movieVideosResponseCall.enqueue(new Callback<VideosResponse>() {
+            @Override
+            public void onResponse(Call<VideosResponse> call, Response<VideosResponse> response) {
+                VideosResponse videosResponse = response.body();
+
+                if (!videosResponse.getResults().isEmpty()) {
                     //get movie video
                     final Video video = response.body().getResults().get(0);
 
@@ -129,18 +130,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         }
                     });
 
+                } else {
+                    playVideoButton.setVisibility(View.INVISIBLE);
                 }
 
-                @Override
-                public void onFailure(Call<VideosResponse> call, Throwable t) {
-                    Toast.makeText(MovieDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
 
-                }
-            });
+            @Override
+            public void onFailure(Call<VideosResponse> call, Throwable t) {
+                Toast.makeText(MovieDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
 
-        } else {
-            playVideoButton.setVisibility(View.GONE);
-        }
+            }
+        });
 
     }
 
