@@ -1,5 +1,6 @@
 package github.vege19.popnow.Fragments.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,11 @@ import java.util.List;
 import github.vege19.popnow.Adapters.TrendingAdapter;
 import github.vege19.popnow.Models.Trending.Trending;
 import github.vege19.popnow.Models.Trending.TrendingResponse;
+import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 import github.vege19.popnow.Retrofit.RetrofitClient;
+import github.vege19.popnow.TvShowDetailsActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,13 +102,27 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<TrendingResponse> call, Response<TrendingResponse> response) {
                 //get the object with position 0
-                Trending tmp = response.body().getResults().get(0);
+                final Trending tmp = response.body().getResults().get(0);
                 //get the top 1 trending item
                 firstItemTitle.setText(tmp.getName());
 
                 Glide.with(getContext())
                         .load(ApiService.imageURL + tmp.getBackdrop_path())
                         .into(firstTrendingItem);
+
+                //show details according content type
+                firstTrendingItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (tmp.getRelease_date() != null) {
+                            //if content type is Movie
+                            initMovieDetails(tmp);
+                        } else if (tmp.getFirst_air_date() != null) {
+                            //if content type is Tv
+                            initTvShowDetails(tmp);
+                        }
+                    }
+                });
 
             }
 
@@ -116,6 +133,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
+    }
+
+    private void initMovieDetails(Trending trending) {
+        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+        intent.putExtra("trending_movie_details", trending);
+        startActivity(intent);
+    }
+
+    private void initTvShowDetails(Trending trending) {
+        Intent intent = new Intent(getContext(), TvShowDetailsActivity.class);
+        intent.putExtra("trending_tv_details", trending);
+        startActivity(intent);
     }
 
 }
