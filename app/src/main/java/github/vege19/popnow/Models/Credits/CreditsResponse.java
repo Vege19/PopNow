@@ -2,7 +2,7 @@ package github.vege19.popnow.Models.Credits;
 
 import java.util.List;
 
-public class CastResponse {
+public class CreditsResponse {
 
     private int id;
     private List<Cast> cast;

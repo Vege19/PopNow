@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 
 import github.vege19.popnow.Adapters.TvShowDetailsAdapter;
-import github.vege19.popnow.Fragments.TvShow.TvShowCastFragment;
+import github.vege19.popnow.Fragments.TvShow.TvShowCreditsFragment;
 import github.vege19.popnow.Fragments.TvShow.TvShowOverviewFragment;
 import github.vege19.popnow.Fragments.TvShow.TvShowReviewsFragment;
 import github.vege19.popnow.Models.Trending.Trending;
@@ -99,7 +99,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         //create adapter for the viewpager and add fragments
         mAdapter = new TvShowDetailsAdapter(getSupportFragmentManager());
         mAdapter.addFragment(new TvShowOverviewFragment(), "Overview");
-        mAdapter.addFragment(new TvShowCastFragment(), "Cast");
+        mAdapter.addFragment(new TvShowCreditsFragment(), "Cast");
         mAdapter.addFragment(new TvShowReviewsFragment(), "Reviews");
 
         //set adapter to viewpager

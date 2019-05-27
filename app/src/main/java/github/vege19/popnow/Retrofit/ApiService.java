@@ -1,6 +1,6 @@
 package github.vege19.popnow.Retrofit;
 
-import github.vege19.popnow.Models.Credits.CastResponse;
+import github.vege19.popnow.Models.Credits.CreditsResponse;
 import github.vege19.popnow.Models.Genre.GenresResponse;
 import github.vege19.popnow.Models.Movie.MoviesResponse;
 import github.vege19.popnow.Models.Review.ReviewsResponse;
@@ -38,13 +38,13 @@ public interface ApiService {
 
     //Get credits from a movie
     @GET("movie/{movie_id}/credits")
-    Call<CastResponse> getMovieCasts(@Path("movie_id") int movie_id,
-                                @Query("api_key") String api_key);
+    Call<CreditsResponse> getMovieCredits(@Path("movie_id") int movie_id,
+                                        @Query("api_key") String api_key);
 
     //Get credits from tv shows
     @GET("tv/{tv_id}/credits")
-    Call<CastResponse> getTvShowCasts(@Path("tv_id") int tv_id,
-                                @Query("api_key") String api_key);
+    Call<CreditsResponse> getTvShowCredits(@Path("tv_id") int tv_id,
+                                         @Query("api_key") String api_key);
 
     //Get a list of movie genres
     @GET("genre/movie/list")
