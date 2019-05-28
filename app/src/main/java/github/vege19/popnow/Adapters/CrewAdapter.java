@@ -1,6 +1,7 @@
 package github.vege19.popnow.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import github.vege19.popnow.Models.Credits.Crew;
+import github.vege19.popnow.PersonDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 
@@ -38,7 +40,7 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Crew crew = crewList.get(position);
+        final Crew crew = crewList.get(position);
 
         holder.name.setText(crew.getName());
         holder.job.setText(crew.getJob());
@@ -47,6 +49,16 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.ViewHolder> {
                 .load(ApiService.imageURL + crew.getProfile_path())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.profile);
+
+        //send id to person details activity
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PersonDetailsActivity.class);
+                intent.putExtra("person_id", crew.getId());
+                context.startActivity(intent);
+            }
+        });
 
     }
 

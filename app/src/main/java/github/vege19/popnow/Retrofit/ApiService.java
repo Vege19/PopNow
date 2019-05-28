@@ -1,6 +1,7 @@
 package github.vege19.popnow.Retrofit;
 
 import github.vege19.popnow.Models.Credits.CreditsResponse;
+import github.vege19.popnow.Models.Credits.Person;
 import github.vege19.popnow.Models.Genre.GenresResponse;
 import github.vege19.popnow.Models.Movie.MoviesResponse;
 import github.vege19.popnow.Models.Review.ReviewsResponse;
@@ -93,5 +94,11 @@ public interface ApiService {
     //get trending
     @GET("trending/all/day")
     Call<TrendingResponse> getTrendingContent(@Query("api_key") String api_key);
+
+    //Get people
+    @GET("person/{person_id}")
+    Call<Person> getPerson(@Path("person_id") int person_id,
+                           @Query("api_key") String api_key,
+                           @Query("language") String language);
 
 }
