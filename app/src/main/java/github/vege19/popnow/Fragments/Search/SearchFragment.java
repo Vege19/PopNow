@@ -5,6 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,12 +17,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import github.vege19.popnow.Adapters.CastAdapter;
 import github.vege19.popnow.Adapters.MoviesAdapter;
 import github.vege19.popnow.Adapters.TvShowsAdapter;
+import github.vege19.popnow.Models.Credits.Cast;
+import github.vege19.popnow.Models.Movie.Movie;
 import github.vege19.popnow.Models.Search.SearchMovieResponse;
 import github.vege19.popnow.Models.Search.SearchPeopleResponse;
 import github.vege19.popnow.Models.Search.SearchTvShowResponse;
+import github.vege19.popnow.Models.TvShow.TvShow;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
 import github.vege19.popnow.Retrofit.RetrofitClient;
@@ -30,7 +39,11 @@ import retrofit2.Response;
 public class SearchFragment extends Fragment {
 
     private SearchView mSearchView;
-    private RecyclerView moviesRecyclerView, tvShowsRecyclerView, peopleRecyclerView;
+    private Spinner mSpinner;
+    private RecyclerView mSearchRecyclerView;
+    private List<Movie> movies = new ArrayList<>();
+    private List<TvShow> tvShows = new ArrayList<>();
+    private List<Cast> persons = new ArrayList<>();
 
     @Nullable
     @Override
@@ -43,13 +56,14 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Init spinner
+        spinnerSetUp();
+        Toast.makeText(getContext(), mSpinner.getSelectedItem().toString().trim(), Toast.LENGTH_SHORT).show();
+
         //recycler view setup
-        moviesRecyclerView = getActivity().findViewById(R.id.searchedMoviesRecyclerView);
-        moviesRecyclerView.setLayoutManager(layoutManager());
-        tvShowsRecyclerView = getActivity().findViewById(R.id.searchedTvShowsRecyclerView);
-        tvShowsRecyclerView.setLayoutManager(layoutManager());
-        peopleRecyclerView = getActivity().findViewById(R.id.searchedPeopleRecyclerView);
-        peopleRecyclerView.setLayoutManager(layoutManager());
+        mSearchRecyclerView = getActivity().findViewById(R.id.searchRecyclerView);
+        mSearchRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mSearchRecyclerView.setHasFixedSize(true);
 
         //get results with user input
         mSearchView = getActivity().findViewById(R.id.mainSearch);
@@ -57,9 +71,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (!query.isEmpty()) {
-                    getMovieResults(query);
-                    getTvShowResults(query);
-                    getPeopleResults(query);
+                    searchContent(query);
                 }
                 return true;
             }
@@ -67,52 +79,86 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (!newText.isEmpty()) {
-                    getMovieResults(newText);
-                    getTvShowResults(newText);
-                    getPeopleResults(newText);
+                    searchContent(newText);
                 }
-                return true;
+                return false;
             }
         });
 
     }
 
-    private void getMovieResults(final String query) {
-        //retrofit call
-        Call<SearchMovieResponse> searchResponseCall = RetrofitClient.getInstance().getApi().findMovies(ApiService.api_key,
+    private void searchContent(final String query) {
+
+        if (mSpinner.getSelectedItem().toString().equals("Movies")) {
+            loadMovies(query);
+        } else if (mSpinner.getSelectedItem().toString().equals("Tv Shows")) {
+            loadTvShows(query);
+        } else if (mSpinner.getSelectedItem().toString().equals("People")) {
+            loadPeople(query);
+        }
+
+        //To not re-submit after select spinner option
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0:
+                        loadMovies(query);
+                        break;
+                    case 1:
+                        loadTvShows(query);
+                        break;
+                    case 2:
+                        loadPeople(query);
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+
+    private void loadMovies(String query) {
+        Call<SearchMovieResponse> call = RetrofitClient.getInstance().getApi().findMovies(ApiService.api_key,
                 ApiService.language,
                 query);
 
-        searchResponseCall.enqueue(new Callback<SearchMovieResponse>() {
+        call.enqueue(new Callback<SearchMovieResponse>() {
             @Override
             public void onResponse(Call<SearchMovieResponse> call, Response<SearchMovieResponse> response) {
-                SearchMovieResponse searchMovieResponse = response.body();
-                //save movies
-                if (searchMovieResponse.getResults().isEmpty()) {
-                    moviesRecyclerView.setAdapter(new MoviesAdapter(searchMovieResponse.getResults(), getContext()));
-                }
-
+                //Save results in the list
+                movies = response.body().getResults();
+                Log.d("debug", "Success");
+                //Set movies adapter to recycler view
+                mSearchRecyclerView.setAdapter(new MoviesAdapter(movies, getContext()));
             }
 
             @Override
             public void onFailure(Call<SearchMovieResponse> call, Throwable t) {
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
+
     }
 
-    private void getTvShowResults(String query) {
-        //retrofit call
-        Call<SearchTvShowResponse> searchTvShowResponseCall = RetrofitClient.getInstance().getApi().findTvShows(ApiService.api_key,
+    private void loadTvShows(String query) {
+        Call<SearchTvShowResponse> call = RetrofitClient.getInstance().getApi().findTvShows(ApiService.api_key,
                 ApiService.language,
                 query);
 
-        searchTvShowResponseCall.enqueue(new Callback<SearchTvShowResponse>() {
+        call.enqueue(new Callback<SearchTvShowResponse>() {
             @Override
             public void onResponse(Call<SearchTvShowResponse> call, Response<SearchTvShowResponse> response) {
-                //save tv shows
-                tvShowsRecyclerView.setAdapter(new TvShowsAdapter(response.body().getResults(), getContext()));
+                //Save results
+                tvShows = response.body().getResults();
+                //Set tv shows adapter
+                mSearchRecyclerView.setAdapter(new TvShowsAdapter(tvShows, getContext()));
             }
 
             @Override
@@ -121,20 +167,19 @@ public class SearchFragment extends Fragment {
 
             }
         });
-
     }
 
-    private void getPeopleResults(String query) {
-        //retrofit call
-        Call<SearchPeopleResponse> searchPeopleResponseCall = RetrofitClient.getInstance().getApi().findPeople(ApiService.api_key,
+    private void loadPeople(String query) {
+        Call<SearchPeopleResponse> call = RetrofitClient.getInstance().getApi().findPeople(ApiService.api_key,
                 ApiService.language,
                 query);
 
-        searchPeopleResponseCall.enqueue(new Callback<SearchPeopleResponse>() {
+        call.enqueue(new Callback<SearchPeopleResponse>() {
             @Override
             public void onResponse(Call<SearchPeopleResponse> call, Response<SearchPeopleResponse> response) {
-                //save people
-                peopleRecyclerView.setAdapter(new CastAdapter(response.body().getResults(), getContext()));
+                persons = response.body().getResults();
+                //Set adapter
+                mSearchRecyclerView.setAdapter(new CastAdapter(persons, getContext()));
             }
 
             @Override
@@ -146,15 +191,20 @@ public class SearchFragment extends Fragment {
     }
 
 
-    private RecyclerView.LayoutManager layoutManager() {
-        //To show the list in horizontal
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),
-                1,
-                GridLayoutManager.HORIZONTAL,
-                false);
+    private void spinnerSetUp() {
+        //Get string array of options
+        String[] options = getResources().getStringArray(R.array.media_type_array);
 
-        return layoutManager;
+        //Create the adapter
+        ArrayAdapter<String> optionsAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                options);
+
+        //Get spinner reference
+        mSpinner = getActivity().findViewById(R.id.searchTypeSpinner);
+        //Set adapter
+        mSpinner.setAdapter(optionsAdapter);
+
     }
-
 
 }
