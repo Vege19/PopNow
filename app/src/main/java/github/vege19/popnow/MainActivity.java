@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import github.vege19.popnow.Fragments.Home.HomeFragment;
 import github.vege19.popnow.Fragments.Movie.MoviesFragment;
+import github.vege19.popnow.Fragments.Search.SearchFragment;
 import github.vege19.popnow.Fragments.TvShow.TVShowsFragment;
 
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment moviesFragment;
     private Fragment tvshowsFragment;
     private Fragment homeFragment;
+    private Fragment searchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         moviesFragment = new MoviesFragment();
         tvshowsFragment = new TVShowsFragment();
         homeFragment = new HomeFragment();
+        searchFragment = new SearchFragment();
 
         fragmentManager = getSupportFragmentManager();
 
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.navigation_tv:
                         currentFragment = tvshowsFragment;
+                        break;
+                    case R.id.navigationSearch:
+                        currentFragment = searchFragment;
                         break;
                 }
 

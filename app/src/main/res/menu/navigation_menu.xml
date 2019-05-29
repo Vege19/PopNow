@@ -16,4 +16,9 @@
         android:title="@string/navigation_tv"
         android:icon="@drawable/ic_round_tv_24px"/>
 
+    <item
+        android:id="@+id/navigationSearch"
+        android:title="Search"
+        android:icon="@drawable/ic_search_24px"/>
+
 </menu>

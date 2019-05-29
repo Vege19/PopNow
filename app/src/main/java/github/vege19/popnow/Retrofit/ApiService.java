@@ -5,6 +5,9 @@ import github.vege19.popnow.Models.Credits.Person;
 import github.vege19.popnow.Models.Genre.GenresResponse;
 import github.vege19.popnow.Models.Movie.MoviesResponse;
 import github.vege19.popnow.Models.Review.ReviewsResponse;
+import github.vege19.popnow.Models.Search.SearchMovieResponse;
+import github.vege19.popnow.Models.Search.SearchPeopleResponse;
+import github.vege19.popnow.Models.Search.SearchTvShowResponse;
 import github.vege19.popnow.Models.Trending.TrendingResponse;
 import github.vege19.popnow.Models.TvShow.TvShowsResponse;
 import github.vege19.popnow.Models.Video.VideosResponse;
@@ -100,5 +103,23 @@ public interface ApiService {
     Call<Person> getPerson(@Path("person_id") int person_id,
                            @Query("api_key") String api_key,
                            @Query("language") String language);
+
+    //Search movies
+    @GET("search/movie")
+    Call<SearchMovieResponse> findMovies(@Query("api_key") String api_key,
+                                        @Query("language") String language,
+                                        @Query("query") String query);
+
+    //Search movies
+    @GET("search/tv")
+    Call<SearchTvShowResponse> findTvShows(@Query("api_key") String api_key,
+                                           @Query("language") String language,
+                                           @Query("query") String query);
+
+    //Search movies
+    @GET("search/person")
+    Call<SearchPeopleResponse> findPeople(@Query("api_key") String api_key,
+                                         @Query("language") String language,
+                                         @Query("query") String query);
 
 }
