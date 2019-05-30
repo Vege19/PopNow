@@ -12,10 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import github.vege19.popnow.Adapters.CastAdapter;
 import github.vege19.popnow.Adapters.CrewAdapter;
+import github.vege19.popnow.Models.Credits.Cast;
 import github.vege19.popnow.Models.Credits.CreditsResponse;
+import github.vege19.popnow.Models.Credits.Crew;
 import github.vege19.popnow.MovieDetailsActivity;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
@@ -26,16 +32,17 @@ import retrofit2.Response;
 
 public class MovieCreditsFragment extends Fragment {
 
-    private RecyclerView castRecyclerView, crewRecyclerView;
-
-    public MovieCreditsFragment() {
-    }
+    private RecyclerView mCastRecyclerView, mCrewRecyclerView;
+    private List<Cast> castList = new ArrayList<>();
+    private List<Crew> crewList = new ArrayList<>();
+    private CastAdapter mCastAdapter;
+    private CrewAdapter mCrewAdapter;
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_movie_credits, container, false);
-
     }
 
     @Override
@@ -47,19 +54,48 @@ public class MovieCreditsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //recyclerview setup
-        castRecyclerView = getActivity().findViewById(R.id.castRecyclerView);
-        castRecyclerView.setLayoutManager(layoutManager());
+        //RecyclerView config
+        recyclerViewSetUp();
 
-        crewRecyclerView = getActivity().findViewById(R.id.crewRecyclerView);
-        crewRecyclerView.setLayoutManager(layoutManager());
-
+        //Load all content
         loadCast();
         loadCrew();
 
+        //To refresh content
+        refreshContent();
+
+    }
+
+    private void refreshContent() {
+        mRefreshLayout = getActivity().findViewById(R.id.movieCreditsRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Clear lists
+                castList.clear();
+                crewList.clear();
+
+                //Reload content
+                loadCast();
+                loadCrew();
+
+                //Stop refreshing
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void recyclerViewSetUp() {
+        mCastRecyclerView = getActivity().findViewById(R.id.castRecyclerView);
+        mCastRecyclerView.setLayoutManager(layoutManager());
+
+        mCrewRecyclerView = getActivity().findViewById(R.id.crewRecyclerView);
+        mCrewRecyclerView.setLayoutManager(layoutManager());
     }
 
     private void loadCrew() {
+        mCrewAdapter = new CrewAdapter(crewList, getContext());
+
         //make retrofit call
         Call<CreditsResponse> crewResponseCall = RetrofitClient.getInstance().getApi().getMovieCredits(MovieDetailsActivity.movie_id,
                 ApiService.api_key);
@@ -67,12 +103,16 @@ public class MovieCreditsFragment extends Fragment {
         crewResponseCall.enqueue(new Callback<CreditsResponse>() {
             @Override
             public void onResponse(Call<CreditsResponse> call, Response<CreditsResponse> response) {
-                CreditsResponse creditsResponse = response.body();
-                crewRecyclerView.setAdapter(new CrewAdapter(creditsResponse.getCrew(), getContext()));
+                //Fill recycler view
+                crewList = response.body().getCrew();
+                mCrewAdapter = new CrewAdapter(crewList, getContext());
+                mCrewRecyclerView.setAdapter(mCrewAdapter);
             }
 
             @Override
             public void onFailure(Call<CreditsResponse> call, Throwable t) {
+                crewList.clear();
+                mCrewRecyclerView.setAdapter(mCrewAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
@@ -80,19 +120,25 @@ public class MovieCreditsFragment extends Fragment {
     }
 
     private void loadCast() {
+        mCastAdapter = new CastAdapter(castList, getContext());
+
         //make the retrofit call
         Call<CreditsResponse> castResponseCall = RetrofitClient.getInstance().getApi().getMovieCredits(MovieDetailsActivity.movie_id, ApiService.api_key);
 
         castResponseCall.enqueue(new Callback<CreditsResponse>() {
             @Override
             public void onResponse(Call<CreditsResponse> call, Response<CreditsResponse> response) {
-                CreditsResponse creditsResponse = response.body();
-                Log.d("debug", String.valueOf(response.body().getId()));
-                castRecyclerView.setAdapter(new CastAdapter(creditsResponse.getCast(), getActivity()));
+                //Fill recycler view
+                castList = response.body().getCast();
+                mCastAdapter = new CastAdapter(castList, getContext());
+                mCastRecyclerView.setAdapter(mCastAdapter);
+
             }
 
             @Override
             public void onFailure(Call<CreditsResponse> call, Throwable t) {
+                castList.clear();
+                mCastRecyclerView.setAdapter(mCastAdapter);
                 Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }

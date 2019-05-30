@@ -6,11 +6,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/background_rounded_accent_color"
-    android:padding="16dp"
+    android:padding="12dp"
+    style="@style/TextAppearance.MaterialComponents.Body2"
+    android:textColor="@android:color/white"
+    android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:text="Genre"
-    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-    android:textColor="@android:color/white">
-
+    android:layout_marginTop="16dp">
 
 </TextView>

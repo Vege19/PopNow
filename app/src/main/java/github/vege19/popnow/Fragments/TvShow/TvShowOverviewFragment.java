@@ -32,7 +32,7 @@ import retrofit2.Response;
 public class TvShowOverviewFragment extends Fragment {
 
     private TextView overviewText, releaseDateText, voteAverageText;
-    private RecyclerView genresRecyclerview;
+    private RecyclerView mGenresRecyclerView;
     private RatingBar voteRatingBar;
 
     @Nullable
@@ -60,8 +60,8 @@ public class TvShowOverviewFragment extends Fragment {
         voteRatingBar.setProgress((int)TvShowDetailsActivity.tv_vote_average);
 
         //recycler view setup
-        genresRecyclerview = getActivity().findViewById(R.id.tvShowGenresRecyclerview);
-        genresRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
+        mGenresRecyclerView = getActivity().findViewById(R.id.tvShowmGenresRecyclerView);
+        mGenresRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
 
         //load this tv show genres
         loadGenres();
@@ -92,7 +92,7 @@ public class TvShowOverviewFragment extends Fragment {
                     }
                 }
 
-                genresRecyclerview.setAdapter(new GenresAdapter(thisGenres, getContext()));
+                mGenresRecyclerView.setAdapter(new GenresAdapter(thisGenres, getContext()));
 
             }
 

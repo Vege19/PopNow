@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="vertical"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/movieOverviewRefreshLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
@@ -14,15 +15,17 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/movieOverview"
+                android:id="@+id/mOverviewText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lorem"
-                style="@style/TextAppearance.MaterialComponents.Body2" />
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -35,14 +38,14 @@
                 android:layout_height="wrap_content"
                 android:text="Genres"
                 style="@style/TextAppearance.AppCompat.Title"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/genresRecyclerview"
+                android:id="@+id/mGenresRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"/>
+                android:orientation="horizontal" />
 
             <View
                 android:layout_width="match_parent"
@@ -55,13 +58,15 @@
                 android:layout_height="wrap_content"
                 android:text="Release date"
                 style="@style/TextAppearance.AppCompat.Title"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"/>
 
             <TextView
-                android:id="@+id/movieReleaseDate"
+                android:id="@+id/mReleaseDateText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
                 android:text="YYYY/MM/DD"
                 style="@style/TextAppearance.MaterialComponents.Body1"/>
 
@@ -76,13 +81,16 @@
                 android:layout_height="wrap_content"
                 android:text="Vote average"
                 style="@style/TextAppearance.AppCompat.Title"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
 
                 <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/movieRatingBar"
@@ -96,7 +104,7 @@
                     style="@style/Widget.AppCompat.RatingBar.Indicator"/>
 
                 <TextView
-                    android:id="@+id/movieVoteAverage"
+                    android:id="@+id/mVoteAverageText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0"
@@ -110,4 +118,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

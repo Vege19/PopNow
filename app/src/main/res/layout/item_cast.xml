@@ -23,7 +23,8 @@
            android:layout_height="65dp"
            android:layout_gravity="center"
            android:scaleType="centerCrop"
-           android:adjustViewBounds="true"/>
+           android:adjustViewBounds="true"
+           android:src="@drawable/ic_round_person_24px"/>
 
        <TextView
            android:id="@+id/castName"

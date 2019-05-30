@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,12 @@ import retrofit2.Response;
 
 public class MovieOverviewFragment extends Fragment {
 
-    private RecyclerView genresRecyclerview;
-    private TextView movieOverview, movieReleaseDate, movieVoteAverage;
-    private RatingBar movieRatingBar;
+    private RecyclerView mGenresRecyclerView;
+    private List<Genre> genres = new ArrayList<>();
+    private GenresAdapter mAdapter;
+    private TextView mOverviewText, mReleaseDateText, mVoteAverageText;
+    private RatingBar mRatingBar;
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
@@ -44,58 +48,84 @@ public class MovieOverviewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //recyclerview setup
-        genresRecyclerview = getActivity().findViewById(R.id.genresRecyclerview);
-        genresRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
+        initContent();
 
-        //set overview
-        movieOverview = getActivity().findViewById(R.id.movieOverview);
-        movieOverview.setText(MovieDetailsActivity.overview);
-
-        //set release date
-        movieReleaseDate = getActivity().findViewById(R.id.movieReleaseDate);
-        movieReleaseDate.setText(MovieDetailsActivity.release_date);
-
-        //set movie rating
-        movieVoteAverage = getActivity().findViewById(R.id.movieVoteAverage);
-        movieVoteAverage.setText(String.valueOf(MovieDetailsActivity.vote_average));
-        movieRatingBar = getActivity().findViewById(R.id.movieRatingBar);
-        movieRatingBar.setProgress((int)MovieDetailsActivity.vote_average);
-
-        initGenresRecyclerview();
+        refreshContent();
 
     }
 
-    private void initGenresRecyclerview() {
+    private void refreshContent() {
+        mRefreshLayout = getActivity().findViewById(R.id.movieOverviewRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Clear genres list
+                genres.clear();
+
+                //Reload content
+                initContent();
+
+                //Stop refreshing
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void initContent() {
+        //recyclerview setup
+        mGenresRecyclerView = getActivity().findViewById(R.id.mGenresRecyclerView);
+        mGenresRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
+
+        //set overview
+        mOverviewText = getActivity().findViewById(R.id.mOverviewText);
+        mOverviewText.setText(MovieDetailsActivity.overview);
+
+        //set release date
+        mReleaseDateText = getActivity().findViewById(R.id.mReleaseDateText);
+        mReleaseDateText.setText(MovieDetailsActivity.release_date);
+
+        //set movie rating
+        mVoteAverageText = getActivity().findViewById(R.id.mVoteAverageText);
+        mVoteAverageText.setText(String.valueOf(MovieDetailsActivity.vote_average));
+        mRatingBar = getActivity().findViewById(R.id.movieRatingBar);
+        mRatingBar.setProgress((int)MovieDetailsActivity.vote_average);
+
+        loadGenres();
+
+    }
+
+    private void loadGenres() {
+        mAdapter = new GenresAdapter(genres, getContext());
+
         //make retrofit call
         Call<GenresResponse> genresResponseCall = RetrofitClient.getInstance().getApi().getGenres(ApiService.api_key, ApiService.language);
 
         genresResponseCall.enqueue(new Callback<GenresResponse>() {
             @Override
             public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
-                GenresResponse genresResponse = response.body();
-
                 //genre id's of this movie
                 Integer[] movie_genres = MovieDetailsActivity.genre_ids;
-                List<Genre> thisGenres = new ArrayList<>();
 
                 //select the genres from all genres where matches with this movies genres
                 for (int id : movie_genres) {
-                    for (Genre genre : genresResponse.getGenres()) {
+                    for (Genre genre : response.body().getGenres()) {
                         if (genre.getId() == id) {
                             //add the matched genres to the list of genres
-                            thisGenres.add(new Genre(id, genre.getName()));
+                            genres.add(new Genre(id, genre.getName()));
                         }
                     }
                 }
 
                 //set adapter
-                genresRecyclerview.setAdapter(new GenresAdapter(thisGenres, getContext()));
+                mAdapter = new GenresAdapter(genres, getContext());
+                mGenresRecyclerView.setAdapter(mAdapter);
 
             }
 
             @Override
             public void onFailure(Call<GenresResponse> call, Throwable t) {
+                genres.clear();
+                mGenresRecyclerView.setAdapter(mAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
