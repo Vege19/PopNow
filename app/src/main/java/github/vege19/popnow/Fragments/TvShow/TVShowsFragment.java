@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class TVShowsFragment extends Fragment {
 
-    private RecyclerView popularRecyclerview, topRatedRecyclerview, onAiringRecyclerview;
+    private RecyclerView mPopularRecyclerView, mTopRatedRecyclerView, onAiringRecyclerview;
     private LinearLayout noInternetView, tvShowsLayout;
 
     @Nullable
@@ -47,10 +47,10 @@ public class TVShowsFragment extends Fragment {
         tvShowsLayout.setVisibility(View.INVISIBLE);
 
         //init recyclerviews
-        popularRecyclerview = getActivity().findViewById(R.id.popularTvShowsRecyclerview);
-        popularRecyclerview.setLayoutManager(layoutManager());
-        topRatedRecyclerview = getActivity().findViewById(R.id.topRatedTvShowsRecyclerview);
-        topRatedRecyclerview.setLayoutManager(layoutManager());
+        mPopularRecyclerView = getActivity().findViewById(R.id.popularTvShowsRecyclerview);
+        mPopularRecyclerView.setLayoutManager(layoutManager());
+        mTopRatedRecyclerView = getActivity().findViewById(R.id.topRatedTvShowsRecyclerview);
+        mTopRatedRecyclerView.setLayoutManager(layoutManager());
         onAiringRecyclerview = getActivity().findViewById(R.id.onAiringTvShowsRecyclerview);
         onAiringRecyclerview.setLayoutManager(layoutManager());
 
@@ -73,7 +73,7 @@ public class TVShowsFragment extends Fragment {
                 showTvShowsLayout();
                 //fill recycler view
                 TvShowsResponse tvShowsResponse = response.body();
-                popularRecyclerview.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
+                mPopularRecyclerView.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
 
             }
 
@@ -126,7 +126,7 @@ public class TVShowsFragment extends Fragment {
                 showTvShowsLayout();
                 //fill recycler view
                 TvShowsResponse tvShowsResponse = response.body();
-                topRatedRecyclerview.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
+                mTopRatedRecyclerView.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
 
             }
 

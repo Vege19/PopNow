@@ -25,20 +25,17 @@ public interface ApiService {
     //Get a list of popular movies
     @GET("movie/popular")
     Call<MoviesResponse> getPopularMovies(@Query("api_key") String api_key,
-                                          @Query("language") String language,
-                                          @Query("page") int page);
+                                          @Query("language") String language);
 
     //Get a list of top rated movies
     @GET("movie/top_rated")
     Call<MoviesResponse> getTopRatedMovies(@Query("api_key") String api_key,
-                                           @Query("language") String language,
-                                           @Query("page") int page);
+                                           @Query("language") String language);
 
     //Get a list of upcoming movies
     @GET("movie/upcoming")
     Call<MoviesResponse> getUpcomingMovies(@Query("api_key") String api_key,
-                                           @Query("language") String language,
-                                           @Query("page") int page);
+                                           @Query("language") String language);
 
     //Get credits from a movie
     @GET("movie/{movie_id}/credits")
