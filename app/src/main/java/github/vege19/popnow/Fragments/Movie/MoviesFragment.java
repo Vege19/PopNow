@@ -33,6 +33,7 @@ public class MoviesFragment extends Fragment {
     private List<Movie> popularMovies = new ArrayList<>();
     private List<Movie> topRatedMovies = new ArrayList<>();
     private List<Movie> upcomingMovies = new ArrayList<>();
+    private MoviesAdapter mPopularAdapter, mTopRatedAdapter, mUpcomingAdapter;
 
     @Nullable
     @Override
@@ -79,11 +80,13 @@ public class MoviesFragment extends Fragment {
     }
 
     private void recyclerViewSetup() {
-        //Recyclerview setup
+        //RecyclerView setup
         mPopularRecyclerView = getActivity().findViewById(R.id.popularMoviesRecyclerview);
         mPopularRecyclerView.setLayoutManager(layoutManager());
+
         mTopRatedRecyclerView = getActivity().findViewById(R.id.topRatedMoviesRecyclerview);
         mTopRatedRecyclerView.setLayoutManager(layoutManager());
+
         mUpcomingRecyclerView = getActivity().findViewById(R.id.upcomingMoviesRecyclerview);
         mUpcomingRecyclerView.setLayoutManager(layoutManager());
 
@@ -109,11 +112,14 @@ public class MoviesFragment extends Fragment {
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 //Fill recycler view with results
                 popularMovies = response.body().getResults();
-                mPopularRecyclerView.setAdapter(new MoviesAdapter(popularMovies, getContext()));
+                mPopularAdapter = new MoviesAdapter(popularMovies, getContext());
+                mPopularRecyclerView.setAdapter(mPopularAdapter);
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                popularMovies.clear();
+                mPopularAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -129,11 +135,14 @@ public class MoviesFragment extends Fragment {
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 //Fill recycler view with results
                 topRatedMovies = response.body().getResults();
-                mTopRatedRecyclerView.setAdapter(new MoviesAdapter(topRatedMovies, getContext()));
+                mTopRatedAdapter = new MoviesAdapter(topRatedMovies, getContext());
+                mTopRatedRecyclerView.setAdapter(mTopRatedAdapter);
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                topRatedMovies.clear();
+                mTopRatedAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -149,11 +158,14 @@ public class MoviesFragment extends Fragment {
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 //Fill recycler view
                 upcomingMovies = response.body().getResults();
-                mUpcomingRecyclerView.setAdapter(new MoviesAdapter(upcomingMovies, getContext()));
+                mUpcomingAdapter = new MoviesAdapter(upcomingMovies, getContext());
+                mUpcomingRecyclerView.setAdapter(mUpcomingAdapter);
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                upcomingMovies.clear();
+                mUpcomingAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

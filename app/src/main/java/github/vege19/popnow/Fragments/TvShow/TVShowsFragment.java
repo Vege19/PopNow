@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,8 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import github.vege19.popnow.Adapters.TvShowsAdapter;
+import github.vege19.popnow.Models.TvShow.TvShow;
 import github.vege19.popnow.Models.TvShow.TvShowsResponse;
 import github.vege19.popnow.R;
 import github.vege19.popnow.Retrofit.ApiService;
@@ -24,63 +28,86 @@ import retrofit2.Response;
 
 public class TVShowsFragment extends Fragment {
 
-    private RecyclerView mPopularRecyclerView, mTopRatedRecyclerView, onAiringRecyclerview;
-    private LinearLayout noInternetView, tvShowsLayout;
+    private RecyclerView mPopularRecyclerView, mTopRatedRecyclerView, mOnAiringRecyclerView;
+    private List<TvShow> onAiringTvShows = new ArrayList<>();
+    private List<TvShow> popularTvShows = new ArrayList<>();
+    private List<TvShow> topRatedTvShows = new ArrayList<>();
+    private TvShowsAdapter mPopularAdapter, mOnAiringAdapter, mTopRatedAdapter;
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tvshows, container, false);
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //views
-        noInternetView = getActivity().findViewById(R.id.tvShowsNoInternetMessage);
-        tvShowsLayout = getActivity().findViewById(R.id.tvShowsLayout);
-
-        //all views starts invisible
-        noInternetView.setVisibility(View.INVISIBLE);
-        tvShowsLayout.setVisibility(View.INVISIBLE);
-
-        //init recyclerviews
-        mPopularRecyclerView = getActivity().findViewById(R.id.popularTvShowsRecyclerview);
-        mPopularRecyclerView.setLayoutManager(layoutManager());
-        mTopRatedRecyclerView = getActivity().findViewById(R.id.topRatedTvShowsRecyclerview);
-        mTopRatedRecyclerView.setLayoutManager(layoutManager());
-        onAiringRecyclerview = getActivity().findViewById(R.id.onAiringTvShowsRecyclerview);
-        onAiringRecyclerview.setLayoutManager(layoutManager());
+        //RecyclerView config
+        recyclerViewSetUp();
 
         //Load lists
         loadOnAiringTvShows();
         loadPopularTvShows();
         loadTopRatedTvShows();
 
+        //To refresh content
+        refreshContent();
+
+    }
+
+    private void refreshContent() {
+        mRefreshLayout = getActivity().findViewById(R.id.tvShowsRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Clear lists
+                onAiringTvShows.clear();
+                popularTvShows.clear();
+                topRatedTvShows.clear();
+
+                //Reload content
+                loadOnAiringTvShows();
+                loadPopularTvShows();
+                loadTopRatedTvShows();
+
+                //Stop refreshing
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void recyclerViewSetUp() {
+        //init recycler views
+        mPopularRecyclerView = getActivity().findViewById(R.id.popularTvShowsRecyclerview);
+        mPopularRecyclerView.setLayoutManager(layoutManager());
+        mTopRatedRecyclerView = getActivity().findViewById(R.id.topRatedTvShowsRecyclerview);
+        mTopRatedRecyclerView.setLayoutManager(layoutManager());
+        mOnAiringRecyclerView = getActivity().findViewById(R.id.onAiringTvShowsRecyclerview);
+        mOnAiringRecyclerView.setLayoutManager(layoutManager());
+
     }
 
     private void loadPopularTvShows() {
-        //make retrofit call
+        //Make retrofit call
         Call<TvShowsResponse> tvShowsResponseCall = RetrofitClient.getInstance().getApi().getPopularTvShows(ApiService.api_key,
                 ApiService.language);
 
         tvShowsResponseCall.enqueue(new Callback<TvShowsResponse>() {
             @Override
             public void onResponse(Call<TvShowsResponse> call, Response<TvShowsResponse> response) {
-                //show views
-                showTvShowsLayout();
-                //fill recycler view
-                TvShowsResponse tvShowsResponse = response.body();
-                mPopularRecyclerView.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
-
+                //Fill recycler view
+                popularTvShows = response.body().getResults();
+                mPopularAdapter = new TvShowsAdapter(popularTvShows, getContext());
+                mPopularRecyclerView.setAdapter(mPopularAdapter);
             }
 
             @Override
             public void onFailure(Call<TvShowsResponse> call, Throwable t) {
-                //hide views and show no internet message
-                hideTvShowsLayout();
+                popularTvShows.clear();
+                mPopularAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
@@ -95,20 +122,17 @@ public class TVShowsFragment extends Fragment {
         tvShowsResponseCall.enqueue(new Callback<TvShowsResponse>() {
             @Override
             public void onResponse(Call<TvShowsResponse> call, Response<TvShowsResponse> response) {
-                //show views
-                showTvShowsLayout();
-                //fill recycler view
-                TvShowsResponse tvShowsResponse = response.body();
-                onAiringRecyclerview.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
-
+                //Fill recycler view
+                onAiringTvShows = response.body().getResults();
+                mOnAiringAdapter = new TvShowsAdapter(onAiringTvShows, getContext());
+                mOnAiringRecyclerView.setAdapter(mOnAiringAdapter);
             }
 
             @Override
             public void onFailure(Call<TvShowsResponse> call, Throwable t) {
-                //hide views and show no internet message
-                hideTvShowsLayout();
+                onAiringTvShows.clear();
+                mOnAiringAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -122,25 +146,21 @@ public class TVShowsFragment extends Fragment {
         tvShowsResponseCall.enqueue(new Callback<TvShowsResponse>() {
             @Override
             public void onResponse(Call<TvShowsResponse> call, Response<TvShowsResponse> response) {
-                //show views
-                showTvShowsLayout();
-                //fill recycler view
-                TvShowsResponse tvShowsResponse = response.body();
-                mTopRatedRecyclerView.setAdapter(new TvShowsAdapter(tvShowsResponse.getResults(), getContext()));
-
+                //Fill recycler view
+                topRatedTvShows = response.body().getResults();
+                mTopRatedAdapter = new TvShowsAdapter(topRatedTvShows, getContext());
+                mTopRatedRecyclerView.setAdapter(mTopRatedAdapter);
             }
 
             @Override
             public void onFailure(Call<TvShowsResponse> call, Throwable t) {
-                //hide views and show no internet message
-                hideTvShowsLayout();
+                topRatedTvShows.clear();
+                mTopRatedAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
             }
         });
     }
 
-    /**Global layout manager**/
     private RecyclerView.LayoutManager layoutManager() {
         //To show the list in horizontal
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),
@@ -149,19 +169,6 @@ public class TVShowsFragment extends Fragment {
                 false);
 
         return layoutManager;
-    }
-
-    private void hideTvShowsLayout() {
-        //Show error view and hide tvShows layout
-        tvShowsLayout.setVisibility(View.INVISIBLE);
-        noInternetView.setVisibility(View.VISIBLE);
-    }
-
-    private void showTvShowsLayout() {
-        //Show the layout, hide the error view
-        noInternetView.setVisibility(View.INVISIBLE);
-        tvShowsLayout.setVisibility(View.VISIBLE);
-
     }
 
 }
