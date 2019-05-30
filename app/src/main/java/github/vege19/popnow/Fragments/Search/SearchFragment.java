@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class SearchFragment extends Fragment {
     private List<Movie> movies = new ArrayList<>();
     private List<TvShow> tvShows = new ArrayList<>();
     private List<Cast> persons = new ArrayList<>();
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
@@ -58,7 +60,6 @@ public class SearchFragment extends Fragment {
 
         //Init spinner
         spinnerSetUp();
-        Toast.makeText(getContext(), mSpinner.getSelectedItem().toString().trim(), Toast.LENGTH_SHORT).show();
 
         //recycler view setup
         mSearchRecyclerView = getActivity().findViewById(R.id.searchRecyclerView);
@@ -71,6 +72,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (!query.isEmpty()) {
+                    //First load content
                     searchContent(query);
                 }
                 return true;
@@ -87,13 +89,42 @@ public class SearchFragment extends Fragment {
 
     }
 
+    private void refreshContent(final String query, final String media_type) {
+        mRefreshLayout = getActivity().findViewById(R.id.searchRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Clear lists
+                movies.clear();
+                tvShows.clear();
+                persons.clear();
+
+                //Reload content
+                if (media_type.equals("Movies")) {
+                    loadMovies(query);
+                } else if (media_type.equals("Tv Shows")) {
+                    loadTvShows(query);
+                } else if (media_type.equals("People")) {
+                    loadPeople(query);
+                }
+
+                //Stop refreshing
+                mRefreshLayout.setRefreshing(false);
+
+            }
+        });
+    }
+
     private void searchContent(final String query) {
 
         if (mSpinner.getSelectedItem().toString().equals("Movies")) {
             loadMovies(query);
+            refreshContent(query, "Movies");
         } else if (mSpinner.getSelectedItem().toString().equals("Tv Shows")) {
             loadTvShows(query);
+            refreshContent(query, "Tv Shows");
         } else if (mSpinner.getSelectedItem().toString().equals("People")) {
+            refreshContent(query, "People");
             loadPeople(query);
         }
 
@@ -105,12 +136,15 @@ public class SearchFragment extends Fragment {
                 switch (position) {
                     case 0:
                         loadMovies(query);
+                        refreshContent(query, "Movies");
                         break;
                     case 1:
                         loadTvShows(query);
+                        refreshContent(query, "Tv Shows");
                         break;
                     case 2:
                         loadPeople(query);
+                        refreshContent(query, "People");
                         break;
 
                 }
