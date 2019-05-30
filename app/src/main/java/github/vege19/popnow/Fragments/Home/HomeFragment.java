@@ -11,9 +11,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -34,9 +36,13 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView trendingRecyclerview;
+    private RecyclerView mTrendingRecyclerView;
+    private List<Trending> trendingList = new ArrayList<>();
+    private TrendingAdapter mTrendingAdapter;
     private ImageView firstTrendingItem;
     private TextView firstItemTitle;
+    private CardView mTopItem;
+    private SwipeRefreshLayout mRefreshLayout;
 
     @Nullable
     @Override
@@ -49,76 +55,105 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        firstItemTitle = getActivity().findViewById(R.id.trendingItem1Title);
+        //RecyclerView config
+        recyclerViewSetUp();
 
+        //Load first trending item
         loadTopItem();
 
-        //recycler view set up
-        trendingRecyclerview = getActivity().findViewById(R.id.trendingRecyclerView);
-        trendingRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
-        //load list of remaining 4 items
+        //Load list of remaining 4 items
         loadTrending();
+
+        //To refresh content
+        refreshContent();
 
     }
 
+    private void refreshContent() {
+        mRefreshLayout = getActivity().findViewById(R.id.trendingRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Clear trending list
+                trendingList.clear();
+
+                //Reload content
+                loadTopItem();
+                loadTrending();
+
+                //Stop refreshing
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void recyclerViewSetUp() {
+        mTrendingRecyclerView = getActivity().findViewById(R.id.mTrendingRecyclerView);
+        mTrendingRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+    }
+
     private void loadTrending() {
-        //retrofit call
+        //Retrofit call
         Call<TrendingResponse> trendingResponseCall = RetrofitClient.getInstance().getApi().getTrendingContent(ApiService.api_key);
 
         trendingResponseCall.enqueue(new Callback<TrendingResponse>() {
             @Override
             public void onResponse(Call<TrendingResponse> call, Response<TrendingResponse> response) {
-                //list
-                List<Trending> tmpList = new ArrayList<>();
-                //get response
-                TrendingResponse trendingResponse = response.body();
-                //fill recycler view
+                //Fill recycler view with 4 items
                 for (int i = 1; i <= 4; i++) {
-                    //trending object
-                    Trending tmp = trendingResponse.getResults().get(i);
-                    //add tmp object to list
-                    tmpList.add(tmp);
-                    //fill rv
-                    trendingRecyclerview.setAdapter(new TrendingAdapter(tmpList, getContext()));
+                    //Trending object
+                    Trending tmp = response.body().getResults().get(i);
+                    //Add tmp object to list
+                    trendingList.add(tmp);
                 }
+
+                mTrendingAdapter = new TrendingAdapter(trendingList, getContext());
+                mTrendingRecyclerView.setAdapter(mTrendingAdapter);
 
             }
 
             @Override
             public void onFailure(Call<TrendingResponse> call, Throwable t) {
+                trendingList.clear();
+                mTrendingAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void loadTopItem() {
+        mTopItem = getActivity().findViewById(R.id.topItemCard);
+
+        firstItemTitle = getActivity().findViewById(R.id.trendingItem1Title);
         firstTrendingItem = getActivity().findViewById(R.id.trendingItem1);
 
-        //get the top item
+        //Get the top item
         Call<TrendingResponse> trendingResponseCall = RetrofitClient.getInstance().getApi().getTrendingContent(ApiService.api_key);
 
         trendingResponseCall.enqueue(new Callback<TrendingResponse>() {
             @Override
             public void onResponse(Call<TrendingResponse> call, Response<TrendingResponse> response) {
-                //get the object with position 0
+                //Show card
+                mTopItem.setVisibility(View.VISIBLE);
+                //Get item with position 0
                 final Trending tmp = response.body().getResults().get(0);
-                //get the top 1 trending item
+                //Set title
                 firstItemTitle.setText(tmp.getName());
 
+                //Load backdrop
                 Glide.with(getContext())
                         .load(ApiService.imageURL + tmp.getBackdrop_path())
                         .into(firstTrendingItem);
 
-                //show details according content type
+                //Show details according content type
                 firstTrendingItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (tmp.getRelease_date() != null) {
-                            //if content type is Movie
+                            //If content type is Movie
                             initMovieDetails(tmp);
                         } else if (tmp.getFirst_air_date() != null) {
-                            //if content type is Tv
+                            //If content type is Tv
                             initTvShowDetails(tmp);
                         }
                     }
@@ -128,6 +163,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<TrendingResponse> call, Throwable t) {
+                //Remove card
+                mTopItem.setVisibility(View.GONE);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
