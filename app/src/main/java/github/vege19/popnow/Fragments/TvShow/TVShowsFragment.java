@@ -91,6 +91,8 @@ public class TVShowsFragment extends Fragment {
     }
 
     private void loadPopularTvShows() {
+        mPopularAdapter = new TvShowsAdapter(popularTvShows, getContext());
+
         //Make retrofit call
         Call<TvShowsResponse> tvShowsResponseCall = RetrofitClient.getInstance().getApi().getPopularTvShows(ApiService.api_key,
                 ApiService.language);
@@ -107,7 +109,7 @@ public class TVShowsFragment extends Fragment {
             @Override
             public void onFailure(Call<TvShowsResponse> call, Throwable t) {
                 popularTvShows.clear();
-                mPopularAdapter.notifyDataSetChanged();
+                mPopularRecyclerView.setAdapter(mPopularAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
@@ -115,6 +117,8 @@ public class TVShowsFragment extends Fragment {
     }
 
     private void loadOnAiringTvShows() {
+        mOnAiringAdapter = new TvShowsAdapter(onAiringTvShows, getContext());
+
         //retrofit call
         Call<TvShowsResponse> tvShowsResponseCall = RetrofitClient.getInstance().getApi().getOnAiringTvShows(ApiService.api_key,
                 ApiService.language);
@@ -131,7 +135,7 @@ public class TVShowsFragment extends Fragment {
             @Override
             public void onFailure(Call<TvShowsResponse> call, Throwable t) {
                 onAiringTvShows.clear();
-                mOnAiringAdapter.notifyDataSetChanged();
+                mOnAiringRecyclerView.setAdapter(mOnAiringAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -139,6 +143,8 @@ public class TVShowsFragment extends Fragment {
     }
 
     private void loadTopRatedTvShows() {
+        mTopRatedAdapter = new TvShowsAdapter(topRatedTvShows, getContext());
+
         //retrofit call
         Call<TvShowsResponse> tvShowsResponseCall = RetrofitClient.getInstance().getApi().getTopRatedTvShows(ApiService.api_key,
                 ApiService.language);
@@ -155,7 +161,7 @@ public class TVShowsFragment extends Fragment {
             @Override
             public void onFailure(Call<TvShowsResponse> call, Throwable t) {
                 topRatedTvShows.clear();
-                mTopRatedAdapter.notifyDataSetChanged();
+                mTopRatedRecyclerView.setAdapter(mTopRatedAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

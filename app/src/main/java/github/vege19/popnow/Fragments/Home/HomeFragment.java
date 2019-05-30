@@ -37,7 +37,7 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private RecyclerView mTrendingRecyclerView;
-    private List<Trending> trendingList = new ArrayList<>();
+    private static List<Trending> trendingList = new ArrayList<>();
     private TrendingAdapter mTrendingAdapter;
     private ImageView firstTrendingItem;
     private TextView firstItemTitle;
@@ -93,12 +93,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadTrending() {
+        mTrendingAdapter = new TrendingAdapter(trendingList, getContext());
+
         //Retrofit call
         Call<TrendingResponse> trendingResponseCall = RetrofitClient.getInstance().getApi().getTrendingContent(ApiService.api_key);
 
         trendingResponseCall.enqueue(new Callback<TrendingResponse>() {
             @Override
             public void onResponse(Call<TrendingResponse> call, Response<TrendingResponse> response) {
+                if (!trendingList.isEmpty()) {
+                    trendingList.clear();
+                }
+
                 //Fill recycler view with 4 items
                 for (int i = 1; i <= 4; i++) {
                     //Trending object
@@ -115,7 +121,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<TrendingResponse> call, Throwable t) {
                 trendingList.clear();
-                mTrendingAdapter.notifyDataSetChanged();
+                mTrendingRecyclerView.setAdapter(mTrendingAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

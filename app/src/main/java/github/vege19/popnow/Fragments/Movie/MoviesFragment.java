@@ -30,9 +30,9 @@ public class MoviesFragment extends Fragment {
 
     private RecyclerView mPopularRecyclerView, mTopRatedRecyclerView, mUpcomingRecyclerView;
     private SwipeRefreshLayout mRefreshLayout;
-    private List<Movie> popularMovies = new ArrayList<>();
-    private List<Movie> topRatedMovies = new ArrayList<>();
-    private List<Movie> upcomingMovies = new ArrayList<>();
+    private static List<Movie> popularMovies = new ArrayList<>();
+    private static List<Movie> topRatedMovies = new ArrayList<>();
+    private static List<Movie> upcomingMovies = new ArrayList<>();
     private MoviesAdapter mPopularAdapter, mTopRatedAdapter, mUpcomingAdapter;
 
     @Nullable
@@ -103,6 +103,8 @@ public class MoviesFragment extends Fragment {
     }
 
     private void loadPopularMovies() {
+        mPopularAdapter = new MoviesAdapter(popularMovies, getContext());
+
         //Retrofit call
         Call<MoviesResponse> call = RetrofitClient.getInstance().getApi().getPopularMovies(ApiService.api_key,
                 ApiService.language);
@@ -119,13 +121,15 @@ public class MoviesFragment extends Fragment {
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
                 popularMovies.clear();
-                mPopularAdapter.notifyDataSetChanged();
+                mPopularRecyclerView.setAdapter(mPopularAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void loadTopRatedMovies() {
+        mTopRatedAdapter = new MoviesAdapter(topRatedMovies, getContext());
+
         //Retrofit call
         Call<MoviesResponse> call = RetrofitClient.getInstance().getApi().getTopRatedMovies(ApiService.api_key,
                 ApiService.language);
@@ -142,13 +146,15 @@ public class MoviesFragment extends Fragment {
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
                 topRatedMovies.clear();
-                mTopRatedAdapter.notifyDataSetChanged();
+                mTopRatedRecyclerView.setAdapter(mTopRatedAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void loadUpcomingMovies() {
+        mUpcomingAdapter = new MoviesAdapter(upcomingMovies, getContext());
+
         //Retrofit call
         Call<MoviesResponse> call = RetrofitClient.getInstance().getApi().getUpcomingMovies(ApiService.api_key,
                 ApiService.language);
@@ -165,7 +171,7 @@ public class MoviesFragment extends Fragment {
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
                 upcomingMovies.clear();
-                mUpcomingAdapter.notifyDataSetChanged();
+                mUpcomingRecyclerView.setAdapter(mUpcomingAdapter);
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
